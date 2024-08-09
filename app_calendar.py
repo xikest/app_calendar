@@ -1,10 +1,12 @@
 import asyncio
 from libs import UPLOADER, ECONOMIC_CALENDAR
 import os
-
+import platform
 async def main():
+        enable_headless = False
+        if platform.system() == "Linux": enable_headless = False
         calendar_id = os.environ.get('CALENDAR_ID')
-        ec = ECONOMIC_CALENDAR(enable_headless=False)
+        ec = ECONOMIC_CALENDAR(enable_headless=enable_headless)
         while True:
             """Main function to authenticate and upload events."""
 

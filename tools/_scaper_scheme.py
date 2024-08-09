@@ -34,6 +34,8 @@ class Scraper:
         if current_os == "Linux":
             self.webdriver_path = "./tools/chromedriver/chromedriver"
             self.browser_path = "./tools/chrome/chrome"
+            self.webdriver_path = os.path.abspath(self.webdriver_path)
+            self.browser_path = os.path.abspath(self.browser_path)
 
 
 
