@@ -1,0 +1,38 @@
+## 실행하기
+nohup python3 -u app_calendar.py > log_app.log 2>&1
+
+#실행 중인 쉘 확인 아래는 bot 키워드
+ps -ef|grep app
+
+## 패키지 목록 저장
+pip freeze > requirements.txt
+
+
+## 패키지 목록에서 설치
+pip install --upgrade pip
+pip install --upgrade -r requirements.txt
+pip install -r requirements.txt
+
+## 구글 캘린더 접속 패키지
+pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+
+## 크롬 실행을 위한 패키지 설치
+sudo apt install libnss3 libxss1 libgconf-2-4 libnspr4 libx11-xcb1 libxcomposite1 libxdamage1 libxtst6 libatk-bridge2.0-0 libgtk-3-0 libgbm1 libatk1.0-0
+
+
+## 파이썬 버전 확인
+python --version
+
+#리눅스 업데이트
+sudo apt update
+
+## 설치 하기
+chmod +x install_env.sh
+./install_env.sh
+
+
+## github 클론
+git clone https://github.com/xikest/app_calendar.git
+## 클론 삭제
+rm -rf app_calendar
+
