@@ -109,7 +109,7 @@ class ECONOMIC_CALENDAR(Scraper):
             # 위치와 알림 설정
             location = row['국가']
             all_day_event = 'False'
-            reminder = '15'  # 15분 전 알림
+            reminder = '1440'  # 15분 전 알림 24 * 60min
 
             # 새로운 이벤트 데이터 추가
             new_event = pd.DataFrame([{
