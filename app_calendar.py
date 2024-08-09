@@ -4,7 +4,7 @@ import os
 
 async def main():
         calendar_id = os.environ.get('CALENDAR_ID')
-        ec = ECONOMIC_CALENDAR(enable_headless=True)
+        ec = ECONOMIC_CALENDAR(enable_headless=False)
         while True:
             """Main function to authenticate and upload events."""
 

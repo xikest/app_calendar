@@ -50,7 +50,7 @@ class ECONOMIC_CALENDAR(Scraper):
                                 rows.append([cell.text.strip() for cell in cells])
                             break
                         except:
-                            print(f"page {page_number}, try {cnt+1}")
+                            print(f"page {page_number}, try {cnt+1}/5")
                             pass
 
                 for cnt in range(2):
@@ -60,8 +60,8 @@ class ECONOMIC_CALENDAR(Scraper):
                         time.sleep(5)
                         break
                     except:
-                        # print(f"next, try {cnt+1}")
-                        if cnt+1 == 5:
+                        print(f"next, try {cnt+1}")
+                        if cnt+1 == 2:
                             print("더 이상 다음 페이지가 없습니다.")
                             RUN = False
                             break
