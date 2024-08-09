@@ -1,10 +1,10 @@
 import asyncio
-from libs import UPLOADER, ECONOMIC_CALENDAR
+from libs import UPDATER, ECONOMIC_CALENDAR
 import os
 import platform
 
 async def main():
-    enable_headless = False
+    enable_headless = True
     if platform.system() == "Linux": enable_headless = True
     calendar_id = os.environ.get('CALENDAR_ID')
     ec = ECONOMIC_CALENDAR(enable_headless=enable_headless)
@@ -16,11 +16,11 @@ async def main():
 
         df_calendar = ec.get_calendar_info(convert_format_google=True)
         df_calendar.to_csv(csv_path, index=False)
-        service = UPLOADER.authenticate(token_path=token_path)
-        UPLOADER.upload_events(service, csv_file=df_calendar, calendar_id=calendar_id)
+        service = UPDATER.authenticate(token_path=token_path)
+        UPDATER.update_events(service, csv_file=df_calendar, calendar_id=calendar_id)
 
         print("Waiting for 1 hours...")
-        await asyncio.sleep(60 * 60)  # 24 hours in seconds
+        await asyncio.sleep(24 * 60 * 60)  # 24 hours in seconds
 
 
 if __name__ == '__main__':
