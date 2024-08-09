@@ -3,9 +3,10 @@ import pandas as pd
 import os
 import pickle
 
+
 class UPDATER:
     @staticmethod
-    def authenticate(token_path:str='token.pickle'):
+    def authenticate(token_path: str = 'token.pickle'):
         """Authenticate and return a Google Calendar service object."""
         creds = None
         if os.path.exists(token_path):
@@ -37,7 +38,14 @@ class UPDATER:
             event_end_time = row['End Time']
             event_description = row['Description']
             event_location = row['Location']
-            reminder_minutes = row['Reminder']
+
+            # Reminder가 있는 경우만 리마인더 설정
+            reminder_minutes = row.get('Reminder', None)
+            reminders = {
+                'useDefault': False
+            }
+            if reminder_minutes is not None:
+                reminders['overrides'] = [{'method': 'popup', 'minutes': reminder_minutes}]
 
             # 기존 일정 검색
             existing_events = service.events().list(
@@ -62,12 +70,7 @@ class UPDATER:
                     'dateTime': f"{event_end_date}T{event_end_time}:00",
                     'timeZone': 'Asia/Seoul',
                 },
-                'reminders': {
-                    'useDefault': False,
-                    'overrides': [
-                        {'method': 'popup', 'minutes': reminder_minutes}
-                    ],
-                },
+                'reminders': reminders,  # 리마인더가 있을 경우만 포함됨
             }
 
             # 기존 일정이 있으면 업데이트, 없으면 새로 생성
