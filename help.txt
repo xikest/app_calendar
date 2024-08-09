@@ -1,3 +1,7 @@
+1. 환경 변수에 calendar id 등록
+CALENDAR_ID = YOUR_calendar id
+echo $CALENDAR_ID
+
 ## 드라이버 설치
 python3 install_driver.py
 ## 실행하기

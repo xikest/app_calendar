@@ -1,6 +1,8 @@
 import subprocess
 import os
 import platform
+
+
 class Installer:
     @staticmethod
     def install_chrome_and_driver():
@@ -15,7 +17,6 @@ class Installer:
         else:
             print("지원하지 않는 운영체제입니다.")
         return chrome_dict
-
 
     @staticmethod
     def _install_chrome_and_driver_linux() -> dict:
@@ -60,11 +61,9 @@ class Installer:
         # 쉘 스크립트 파일 삭제 (선택 사항)
         os.remove(script_file_path)
 
-
         current_dir = os.path.abspath(os.getcwd())
         return {"chrome_path": os.path.join(current_dir, "chrome"),
                 "driver_path": os.path.join(current_dir, "chromedriver")}
-
 
     @staticmethod
     def _install_chrome_and_driver_win() -> dict:
