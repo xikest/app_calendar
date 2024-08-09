@@ -5,19 +5,6 @@ import json
 
 class RSS_FEED():
     def __init__(self):
-        # self.rss_dict = {
-        #     '뉴욕사무소': 'https://www.bok.or.kr/portal/bbs/P0002017/news.rss?menuNo=200365',
-        #     '워싱턴주재원': 'https://www.bok.or.kr/portal/bbs/P0002223/news.rss?menuNo=200082',
-        #     '프랑크푸르트사무소': 'https://www.bok.or.kr/portal/bbs/P0002226/news.rss?menuNo=200083',
-        #     '동경사무소': 'https://www.bok.or.kr/portal/bbs/P0002229/news.rss?menuNo=200084',
-        #     '런던사무소': 'https://www.bok.or.kr/portal/bbs/P0002231/news.rss?menuNo=200085',
-        #     '북경사무소': 'https://www.bok.or.kr/portal/bbs/P0002232/news.rss?menuNo=200086',
-        #     '홍콩주재원': 'https://www.bok.or.kr/portal/bbs/P0002233/news.rss?menuNo=200087',
-        #     '상해주재원': 'https://www.bok.or.kr/portal/bbs/P0002234/news.rss?menuNo=200088'
-        # }
-
-
-        # JSON 파일을 읽어오기
         with open('rss.json', 'r', encoding='utf-8') as file:
             self.rss_dict = json.load(file)
 
@@ -40,7 +27,7 @@ class RSS_FEED():
         # Define the structure of the Google Calendar DataFrame
         calendar_df = pd.DataFrame(columns=[
             'Subject', 'Start Date', 'Start Time', 'End Date', 'End Time', 'Description', 'Location', 'All Day Event',
-            'Reminder'
+            # 'Reminder'
         ])
 
         for index, row in df.iterrows():
@@ -61,7 +48,7 @@ class RSS_FEED():
             # No specific location, all-day event is False, reminder set to 1440 minutes (1 day before)
             location = 'Online'
             all_day_event = 'True'
-            reminder = ''
+            # reminder = ''
 
             # Create a new event entry
             new_event = pd.DataFrame([{
@@ -73,7 +60,7 @@ class RSS_FEED():
                 'Description': description,
                 'Location': location,
                 'All Day Event': all_day_event,
-                'Reminder': reminder
+                # 'Reminder': reminder
             }])
 
             # Add the new event to the calendar DataFrame

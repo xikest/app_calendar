@@ -1,6 +1,7 @@
 1. 환경 변수에 calendar id 등록
 CALENDAR_ID = YOUR_calendar id
-echo $CALENDAR_ID
+echo $CALENDAR_ECONOMIC
+echo $CALENDAR_RSS
 
 ## 토큰 생성 (google oauth2 필요, client_secret.json)
 python3 install_auth_token.py
