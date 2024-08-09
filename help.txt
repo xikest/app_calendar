@@ -2,6 +2,10 @@
 CALENDAR_ID = YOUR_calendar id
 echo $CALENDAR_ID
 
+## 토큰 생성 (google oauth2 필요, client_secret.json)
+python3 install_auth_token.py
+
+
 ## 드라이버 설치
 python3 install_driver.py
 ## 실행하기
