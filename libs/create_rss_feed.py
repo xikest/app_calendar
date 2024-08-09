@@ -18,7 +18,7 @@ class RSS_FEED():
                 title = feed.get("title")
                 df = pd.DataFrame([[title, published, link]], columns=["title", "published", "link"])
                 df_calendar = pd.concat([df_calendar, df], ignore_index=True)
-
+        df_calendar['title'] = df_calendar['title'].str.replace("[현지정보]", "").str.replace("[동향분석]", "")
         if convert_format_google:
             df_calendar = self._convert_to_google_calendar_format(df_calendar)
         return df_calendar
@@ -46,7 +46,7 @@ class RSS_FEED():
             end_time = end_datetime.strftime('%H:%M')
 
             # No specific location, all-day event is False, reminder set to 1440 minutes (1 day before)
-            location = 'Online'
+            location = ''
             all_day_event = 'True'
             # reminder = ''
 

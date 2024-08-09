@@ -90,5 +90,5 @@ class UPDATER:
                 created_event = service.events().insert(calendarId=calendar_id, body=event).execute()
                 print(f"Event created: {created_event.get('htmlLink')}")
 
-        print("Finish uploading")
+        print("Finish updating")
         return None
