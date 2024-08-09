@@ -15,7 +15,6 @@ class ECONOMIC_CALENDAR(Scraper):
         RUN = True
         rows = []
 
-
         # 웹 드라이버 가져오기
         driver = self.web_driver.get_chrome()
         try:
@@ -45,25 +44,30 @@ class ECONOMIC_CALENDAR(Scraper):
             if headers is None:
                 table = driver.find_element(By.XPATH, "//div[@class='tab_cnts']//table")
                 headers = [th.text for th in table.find_elements(By.XPATH, ".//thead//th")]
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+            # time.sleep(5)
             while RUN:
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                time.sleep(self.wait_time)
                 paging_elements = driver.find_elements(By.XPATH,
                                                        "//div[@class='paging']//a[not(contains(@class, 'btn_'))]")
                 page_numbers = [elem.text for elem in paging_elements if elem.text.isdigit()]
-                # print(page_numbers)
-                for page_number in page_numbers:
+                print(page_numbers)
+                for page_number in page_numbers[1:]:
                     for cnt in range(5):
                         try:
-                            driver.find_element(By.XPATH, f"//div[@class='paging']//a[text()='{page_number}']").click()
-                            # print(f"page_number: {page_number}")
-                            time.sleep(self.wait_time)
-                            tbody = driver.find_element(By.XPATH, "//tbody[@id='tbody_data']")
-                            for row in tbody.find_elements(By.XPATH, ".//tr"):
+                            table = driver.find_element(By.XPATH, "//tbody[@id='tbody_data']")
+                            for row in table.find_elements(By.XPATH, ".//tr"):
                                 cells = row.find_elements(By.XPATH, ".//td | .//th")
                                 rows.append([cell.text.strip() for cell in cells])
+                            print(f"page_number: {page_number}")
+                            page = driver.find_element(By.XPATH, f"//div[@class='paging']//a[text()='{page_number}']")
+                            page.click()
+                            time.sleep(5)
                             break
                         except:
-                            print(f"page {page_number}, try {cnt+1}/5")
+                            print(f"page {page_number}, try {cnt + 1}/5")
+                            time.sleep(self.wait_time)
                             pass
 
                 for cnt in range(2):
@@ -74,7 +78,7 @@ class ECONOMIC_CALENDAR(Scraper):
                         break
                     except:
                         # print(f"click next, try {cnt+1}")
-                        if cnt+1 == 2:
+                        if cnt + 1 == 2:
                             print("더 이상 다음 페이지가 없습니다.")
                             RUN = False
                             break
@@ -90,7 +94,6 @@ class ECONOMIC_CALENDAR(Scraper):
             print(e)
         finally:
             driver.quit()
-
 
     def _convert_to_google_calendar_format(self, df):
         # 구글 캘린더 업로드에 필요한 컬럼 생성
