@@ -21,7 +21,6 @@ class ECONOMIC_CALENDAR(Scraper):
         try:
             # 웹 페이지 요청
             driver.get(self.base_url)
-
             iframe = driver.find_element(By.XPATH, "//iframe[@src='https://asp.zeroin.co.kr/eco/hkd/wei/0601.php']")
             driver.switch_to.frame(iframe)
 
@@ -46,12 +45,12 @@ class ECONOMIC_CALENDAR(Scraper):
             if headers is None:
                 table = driver.find_element(By.XPATH, "//div[@class='tab_cnts']//table")
                 headers = [th.text for th in table.find_elements(By.XPATH, ".//thead//th")]
-
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             while RUN:
                 paging_elements = driver.find_elements(By.XPATH,
                                                        "//div[@class='paging']//a[not(contains(@class, 'btn_'))]")
                 page_numbers = [elem.text for elem in paging_elements if elem.text.isdigit()]
-
+                # print(page_numbers)
                 for page_number in page_numbers:
                     for cnt in range(5):
                         try:
