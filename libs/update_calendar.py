@@ -71,14 +71,17 @@ class UPDATER:
             }
 
             # 기존 일정이 있으면 업데이트, 없으면 새로 생성
-            updated = False
+            updated = True
+
             for existing_event in existing_events.get('items', []):
                 if existing_event['summary'] == event_summary:
                     event_id = existing_event['id']
                     service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
                     print(f"Event updated: {existing_event.get('htmlLink')}")
-                    updated = True
                     break
+            else:
+                # 기존 일정이 없으면 새로 생성
+                updated = False
 
             if not updated:
                 created_event = service.events().insert(calendarId=calendar_id, body=event).execute()

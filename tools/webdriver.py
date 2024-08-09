@@ -29,9 +29,13 @@ class WebDriver:
         if self.headless:
             chrome_options.add_argument('--headless=chrome')  # 헤드리스 모드로 실행
             chrome_options.add_argument('--disable-gpu')  # 헤드리스 모드로 실행
+            chrome_options.add_argument("--disable-extensions")  # 헤드리스 모드로 실행
+            chrome_options.add_argument("--window-size=1920,1080")
+
         # --headless = chrome
         chrome_options.add_argument('--no-sandbox')  # 헤드리스 크롬 브라우저를 "사용자 네임스페이스" 옵션 없이 실행하도록 설정
         chrome_options.add_argument('--disable-dev-shm-usage')
+
 
         # chrome_options.add_argument('lang=ko_kr')  # 브라우저 언어
         service = Service(executable_path = self.executable_path)  # 크롬 드라이버 경로 설정

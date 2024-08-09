@@ -21,13 +21,28 @@ class ECONOMIC_CALENDAR(Scraper):
         try:
             # 웹 페이지 요청
             driver.get(self.base_url)
+
             iframe = driver.find_element(By.XPATH, "//iframe[@src='https://asp.zeroin.co.kr/eco/hkd/wei/0601.php']")
             driver.switch_to.frame(iframe)
+
+            time.sleep(self.wait_time)
+            country_selection = driver.find_element(By.XPATH, "//button[@class='btn_nation open_bodPop']")
+            country_selection.click()
+
+            time.sleep(self.wait_time)
+            chk_all = driver.find_element(By.XPATH, "//input[@name='chk_all']")
+            chk_all.click()
+
+            time.sleep(self.wait_time)
+            confirm_button = driver.find_element(By.XPATH, "//button[@class='btn_popClose']")
+            confirm_button.click()
+
+            time.sleep(self.wait_time)
             link = driver.find_element(By.XPATH, "//a[text()='이번 달']")
             self.web_driver.move_element_to_center(link)
             driver.execute_script("arguments[0].click();", link)
-            time.sleep(self.wait_time)
 
+            time.sleep(self.wait_time)
             if headers is None:
                 table = driver.find_element(By.XPATH, "//div[@class='tab_cnts']//table")
                 headers = [th.text for th in table.find_elements(By.XPATH, ".//thead//th")]
@@ -36,7 +51,6 @@ class ECONOMIC_CALENDAR(Scraper):
                 paging_elements = driver.find_elements(By.XPATH,
                                                        "//div[@class='paging']//a[not(contains(@class, 'btn_'))]")
                 page_numbers = [elem.text for elem in paging_elements if elem.text.isdigit()]
-                # print(page_numbers)
 
                 for page_number in page_numbers:
                     for cnt in range(5):
@@ -60,7 +74,7 @@ class ECONOMIC_CALENDAR(Scraper):
                         time.sleep(5)
                         break
                     except:
-                        print(f"next, try {cnt+1}")
+                        # print(f"click next, try {cnt+1}")
                         if cnt+1 == 2:
                             print("더 이상 다음 페이지가 없습니다.")
                             RUN = False
