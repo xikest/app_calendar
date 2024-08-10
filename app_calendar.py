@@ -20,16 +20,16 @@ async def main():
 
     while True:
         token_path = 'token.pickle'
-        # df_economic_calendar = economic_calendar.get_calendar_info()
-        # df_economic_rss = economic_rss.get_rss_info()
+        df_economic_calendar = economic_calendar.get_calendar_info()
+        df_economic_rss = economic_rss.get_rss_info()
         df_news_feed = news_feed.get_news_info()
-        # df_sony = sony_feed.get_rss_info()
+        df_sony = sony_feed.get_rss_info()
 
         service = UPDATER.authenticate(token_path=token_path)
-        # UPDATER.update_events(service, csv_file=df_economic_calendar, calendar_id=calendar_economic)
-        # UPDATER.update_events(service, csv_file=df_economic_rss, calendar_id=calendar_rss)
-        UPDATER.update_events(service, csv_file=df_news_feed, calendar_id=calendar_news, verbose=True)
-        # UPDATER.update_events(service, csv_file=df_sony, calendar_id=calendar_sony, verbose=True)
+        UPDATER.update_events(service, csv_file=df_economic_calendar, calendar_id=calendar_economic)
+        UPDATER.update_events(service, csv_file=df_economic_rss, calendar_id=calendar_rss)
+        UPDATER.update_events(service, csv_file=df_news_feed, calendar_id=calendar_news)
+        UPDATER.update_events(service, csv_file=df_sony, calendar_id=calendar_sony)
         print(f"Waiting for {wait_hour} hours...")
         await asyncio.sleep(wait_hour * 60 * 60)  # 24 hours in seconds
 

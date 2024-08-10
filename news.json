@@ -6,10 +6,6 @@
     "class_key": {
       "title": "news-tit",
       "date": "txt-date"
-    },
-    "query_suffix":
-    {"query": "?page",
-      "suffix": "357"
     }
   }
 }
