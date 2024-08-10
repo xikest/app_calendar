@@ -5,7 +5,7 @@ from tools._scaper_scheme import Scraper
 
 
 class ECONOMIC_CALENDAR(Scraper):
-    def __init__(self, enable_headless=False, wait_time=1):
+    def __init__(self, enable_headless=False, wait_time=2):
         super().__init__(enable_headless=enable_headless)
         self.wait_time = wait_time
         self.base_url = "https://datacenter.hankyung.com/economic-calendar"
@@ -47,26 +47,46 @@ class ECONOMIC_CALENDAR(Scraper):
 
             # time.sleep(5)
             while RUN:
-                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
                 time.sleep(self.wait_time)
                 paging_elements = driver.find_elements(By.XPATH,
                                                        "//div[@class='paging']//a[not(contains(@class, 'btn_'))]")
+
+                for cnt in range(2):
+                    try:
+                        table = driver.find_element(By.XPATH, "//tbody[@id='tbody_data']")
+                        for row in table.find_elements(By.XPATH, ".//tr"):
+                            cells = row.find_elements(By.XPATH, ".//td | .//th")
+                            rows.append([cell.text.strip() for cell in cells])
+                        break
+                    except Exception as e:
+                        print(f"page 0, try {cnt + 1}/2")
+                        print(e)
+                        time.sleep(self.wait_time)
+                        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                        pass
+
                 page_numbers = [elem.text for elem in paging_elements if elem.text.isdigit()]
                 print(page_numbers)
                 for page_number in page_numbers[1:]:
                     for cnt in range(5):
                         try:
+                            print(f"page_number: {page_number}")
+
+                            page = driver.find_element(By.XPATH, f"//div[@class='paging']//a[text()='{page_number}']")
+                            page.click()
+                            time.sleep(5)
+
                             table = driver.find_element(By.XPATH, "//tbody[@id='tbody_data']")
                             for row in table.find_elements(By.XPATH, ".//tr"):
                                 cells = row.find_elements(By.XPATH, ".//td | .//th")
                                 rows.append([cell.text.strip() for cell in cells])
-                            print(f"page_number: {page_number}")
-                            page = driver.find_element(By.XPATH, f"//div[@class='paging']//a[text()='{page_number}']")
-                            page.click()
-                            time.sleep(5)
                             break
-                        except:
+                        except Exception as e:
                             print(f"page {page_number}, try {cnt + 1}/5")
+                            driver.save_screenshot("try error.png")
+                            print(e)
+                            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
                             time.sleep(self.wait_time)
                             pass
 
@@ -77,9 +97,10 @@ class ECONOMIC_CALENDAR(Scraper):
                         time.sleep(5)
                         break
                     except:
-                        # print(f"click next, try {cnt+1}")
+                        driver.save_screenshot("next error.png")
                         if cnt + 1 == 2:
                             print("더 이상 다음 페이지가 없습니다.")
+                            driver.save_screenshot("finish.png")
                             RUN = False
                             break
                         else:

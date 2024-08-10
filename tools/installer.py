@@ -29,7 +29,7 @@ class Installer:
         cd tools
     
         # Download and setup Chrome
-        wget https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chrome-linux64.zip
+        wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/119.0.6045.105/linux64/chrome-linux64.zip
         unzip chrome-linux64.zip -d chrome
         rm chrome-linux64.zip
         cd chrome
@@ -38,7 +38,7 @@ class Installer:
         cd ..
     
         # Download and setup ChromeDriver
-        wget https://storage.googleapis.com/chrome-for-testing-public/127.0.6533.99/linux64/chromedriver-linux64.zip
+        wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/119.0.6045.105/linux64/chromedriver-linux64.zip
         unzip chromedriver-linux64.zip -d chromedriver
         rm chromedriver-linux64.zip
         cd chromedriver

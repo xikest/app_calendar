@@ -41,18 +41,37 @@ class UPDATER:
 
             # Reminder가 있는 경우만 리마인더 설정
             reminder_minutes = row.get('Reminder', None)
-            reminders = {
-                'useDefault': False
-            }
+            reminders = {'useDefault': True}  # 기본값을 사용하도록 설정
             if reminder_minutes is not None:
-                reminders['overrides'] = [{'method': 'popup', 'minutes': reminder_minutes}]
+                reminders = {'useDefault': False, 'overrides': [{'method': 'popup', 'minutes': reminder_minutes}]}
+
+            # 이벤트 날짜와 시간이 모두 비어있는 경우 하루 종일 일정으로 처리
+            if not event_start_time and not event_end_time:
+                start = {
+                    'date': event_start_date,
+                    'timeZone': 'Asia/Seoul'
+                }
+                end = {
+                    'date': event_end_date,
+                    'timeZone': 'Asia/Seoul'
+                }
+            else:
+                # 시간 포함 이벤트
+                start = {
+                    'dateTime': f"{event_start_date}T{event_start_time}:00",
+                    'timeZone': 'Asia/Seoul'
+                }
+                end = {
+                    'dateTime': f"{event_end_date}T{event_end_time}:00",
+                    'timeZone': 'Asia/Seoul'
+                }
 
             # 기존 일정 검색
             existing_events = service.events().list(
                 calendarId=calendar_id,
                 q=event_summary,  # 제목으로 검색
-                timeMin=f"{event_start_date}T{event_start_time}:00+09:00",  # 시작 시간으로 검색 범위 설정
-                timeMax=f"{event_end_date}T{event_end_time}:00+09:00",  # 종료 시간으로 검색 범위 설정
+                timeMin=f"{event_start_date}T{event_start_time or '00:00'}:00+09:00",  # 시작 시간으로 검색 범위 설정
+                timeMax=f"{event_end_date}T{event_end_time or '23:59'}:00+09:00",  # 종료 시간으로 검색 범위 설정
                 singleEvents=True,
                 orderBy='startTime'
             ).execute()
@@ -62,29 +81,21 @@ class UPDATER:
                 'summary': event_summary,
                 'location': event_location,
                 'description': event_description,
-                'start': {
-                    'dateTime': f"{event_start_date}T{event_start_time}:00",
-                    'timeZone': 'Asia/Seoul',
-                },
-                'end': {
-                    'dateTime': f"{event_end_date}T{event_end_time}:00",
-                    'timeZone': 'Asia/Seoul',
-                },
+                'start': start,
+                'end': end,
                 'reminders': reminders,  # 리마인더가 있을 경우만 포함됨
             }
 
             # 기존 일정이 있으면 업데이트, 없으면 새로 생성
-            updated = True
+            updated = False
 
             for existing_event in existing_events.get('items', []):
                 if existing_event['summary'] == event_summary:
                     event_id = existing_event['id']
                     service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
                     print(f"Event updated: {existing_event.get('htmlLink')}")
+                    updated = True
                     break
-            else:
-                # 기존 일정이 없으면 새로 생성
-                updated = False
 
             if not updated:
                 created_event = service.events().insert(calendarId=calendar_id, body=event).execute()

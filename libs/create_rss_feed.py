@@ -33,34 +33,28 @@ class RSS_FEED():
         for index, row in df.iterrows():
             # Extract date and time from the 'published' field
             start_date = row['published'].strftime('%Y-%m-%d')
-            start_time = row['published'].strftime('%H:%M')
 
             # Set the event subject and description
             subject = row['title']
             description = f"More information: {row['link']}"
 
             # Set the end time as 1 hour after the start time
-            start_datetime = row['published']
-            end_datetime = start_datetime + pd.Timedelta(hours=1)
-            end_date = end_datetime.strftime('%Y-%m-%d')
-            end_time = end_datetime.strftime('%H:%M')
+            end_date = start_date
 
             # No specific location, all-day event is False, reminder set to 1440 minutes (1 day before)
             location = ''
             all_day_event = 'True'
-            # reminder = ''
 
             # Create a new event entry
             new_event = pd.DataFrame([{
                 'Subject': subject,
                 'Start Date': start_date,
-                'Start Time': start_time,
+                'Start Time': '',
                 'End Date': end_date,
-                'End Time': end_time,
+                'End Time': '',
                 'Description': description,
                 'Location': location,
                 'All Day Event': all_day_event,
-                # 'Reminder': reminder
             }])
 
             # Add the new event to the calendar DataFrame

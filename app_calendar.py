@@ -22,7 +22,7 @@ async def main():
 
         service = UPDATER.authenticate(token_path=token_path)
         UPDATER.update_events(service, csv_file=df_calendar, calendar_id=calendar_economic)
-        UPDATER.update_events(service, csv_file=df_rss, calendar_id=calendar_rss)
+        # UPDATER.update_events(service, csv_file=df_rss, calendar_id=calendar_rss)
         print(f"Waiting for {wait_hour} hours...")
         await asyncio.sleep(wait_hour * 60 * 60)  # 24 hours in seconds
 
