@@ -1,9 +1,8 @@
 {
-    "한경_글로벌마켓":
-  { "name": "김현석",
-    "src": "web",
-    "url": "https://www.hankyung.com/reporter/48",
+    "web":
+  { "url": "https://www.hankyung.com/reporter/48",
     "class_key": {
+      "position": "news-cont",
       "title": "news-tit",
       "date": "txt-date"
     },

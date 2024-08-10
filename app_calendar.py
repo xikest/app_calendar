@@ -14,10 +14,10 @@ async def main():
     calendar_news = os.environ.get("CALENDAR_NEWS")
     calendar_sony = os.environ.get("CALENDAR_SONY")
     economic_calendar = ECONOMIC_CALENDAR(enable_headless=enable_headless)
-    economic_rss = RssFeed(json_path="rss.json")
-    news_web = NewsFeed(json_path="news.json")
-    news_rss = RssFeed(json_path="rss_news.json")
-    sony_feed = RssFeed(json_path="rss_sony.json")
+    economic_rss = RssFeed(json_path="json/rss.json")
+    news_web = NewsFeed(json_path="json/news.json")
+    news_rss = RssFeed(json_path="json/rss_news.json")
+    sony_feed = RssFeed(json_path="json/rss_sony.json")
 
     while True:
         token_path = 'token.pickle'

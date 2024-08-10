@@ -14,10 +14,8 @@ class NewsFeed:
     def get_news_info(self, convert_format_google=True) -> pd.DataFrame:
         # Extracting the details from the JSON
         all_news_info = pd.DataFrame()
-        for key, news_source in self.news_dict.items():
+        for category, news_source in self.news_dict.items():
             # Extracting the details from the JSON
-            news_name = news_source['name']
-            news_src = news_source['src']
             news_url = news_source['url']
             class_key = news_source['class_key']
             query_suffix = news_source.get("query_suffix")
@@ -32,17 +30,18 @@ class NewsFeed:
                     else:
                         paginated_url = news_url
 
-                    if news_src == 'web':
+                    if category == 'web':
                         scraper = WebScraper()
                         news_info = scraper.get_info(
                             url=paginated_url,
+                            position_class = class_key['position'],
                             title_class=class_key['title'],
                             date_class=class_key['date'],
                         )
                         all_news_info = pd.concat([all_news_info, news_info], ignore_index=True)
             except Exception as e:
                 if self.verbose:
-                    print(f"Error processing {news_name}: {e}")
+                    print(f"Error processing {e}")
 
         if convert_format_google:
             all_news_info = NewsFeed.convert_to_google_calendar_format(all_news_info)
@@ -100,7 +99,7 @@ class WebScraper:
     def __init__(self, base_url=None):
         self.base_url = base_url
 
-    def get_info(self, url, title_class: str, date_class: str) -> pd.DataFrame:
+    def get_info(self, url, position_class:str, title_class: str, date_class: str) -> pd.DataFrame:
         full_url = self.base_url + url if self.base_url else url
         request = Request(full_url, headers={'User-Agent': 'Mozilla/5.0'})
         response = urlopen(request).read()
@@ -108,7 +107,7 @@ class WebScraper:
         soup = BeautifulSoup(content, 'html.parser')
 
         # Extracting the title, link, and date
-        content_elements = soup.find_all('div', class_="news-cont")
+        content_elements = soup.find_all('div', class_=position_class)
         df_news_info = pd.DataFrame()
         for content in content_elements:
             try:
