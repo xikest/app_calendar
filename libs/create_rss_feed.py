@@ -1,29 +1,59 @@
 import pandas as pd
 import feedparser
 import json
+import html
+import re
 
 
-class RSS_FEED():
-    def __init__(self):
-        with open('rss.json', 'r', encoding='utf-8') as file:
+class RssFeed:
+    def __init__(self, json_path: str):
+        with open(json_path, 'r', encoding='utf-8') as file:
             self.rss_dict = json.load(file)
 
     def get_rss_info(self, convert_format_google=True) -> pd.DataFrame:
-        df_calendar = pd.DataFrame(columns=["title", "published", "link"])
+        title = "title"
+        published = "published"
+        link = "link"
+        df_calendar = pd.DataFrame(columns=[title, published, link])
 
-        for src, url in self.rss_dict.items():
-            for feed in feedparser.parse(url).entries:
-                published = pd.to_datetime(feed.get("published"))
-                link = feed.get("link")
-                title = feed.get("title")
-                df = pd.DataFrame([[title, published, link]], columns=["title", "published", "link"])
-                df_calendar = pd.concat([df_calendar, df], ignore_index=True)
-        df_calendar['title'] = df_calendar['title'].str.replace("[현지정보]", "").str.replace("[동향분석]", "")
+        for category, details in self.rss_dict.items():
+            for src, url in details.items():
+                for feed in feedparser.parse(url).entries:
+                    if category == 'web':
+                        published = pd.to_datetime(feed.get("published"))
+                        link = feed.get("link")
+                        title = feed.get("title")
+                        if RssFeed.skip(src, title):
+                            continue
+                    elif category == 'google':
+                        published = pd.to_datetime(feed.get("published"))
+                        link = feed.get('link').replace('https://www.google.com/url?rct=j&sa=t&url=', '').split(
+                            '&ct=ga&cd')[0]
+                        title = html.unescape(feed.get('title'))
+                        title = re.sub(r'<[^>]*>', '', title)
+                    title = RssFeed.re_trim(title)
+                    df = pd.DataFrame([[title, published, link]], columns=["title", "published", "link"])
+                    df_calendar = pd.concat([df_calendar, df], ignore_index=True)
+
         if convert_format_google:
-            df_calendar = self._convert_to_google_calendar_format(df_calendar)
+            df_calendar = RssFeed.convert_to_google_calendar_format(df_calendar)
         return df_calendar
 
-    def _convert_to_google_calendar_format(self, df):
+    @staticmethod
+    def skip(src, title):
+        if src == "sony":
+            skip_list = ["Notice", "Stock"]
+            for skip_word in skip_list:
+                if skip_word in title:
+                    return True
+        return False
+
+    @staticmethod
+    def re_trim(text: str):
+        return text.replace("[현지정보]", "").replace("[동향분석]", "")
+
+    @staticmethod
+    def convert_to_google_calendar_format(df):
         # Define the structure of the Google Calendar DataFrame
         calendar_df = pd.DataFrame(columns=[
             'Subject', 'Start Date', 'Start Time', 'End Date', 'End Time', 'Description', 'Location', 'All Day Event',

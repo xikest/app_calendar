@@ -1,0 +1,13 @@
+{
+    "web": {
+        "뉴욕사무소": "https://www.bok.or.kr/portal/bbs/P0002221/news.rss?menuNo=200081",
+        "워싱턴주재원": "https://www.bok.or.kr/portal/bbs/P0002223/news.rss?menuNo=200082",
+        "프랑크푸르트사무소": "https://www.bok.or.kr/portal/bbs/P0002226/news.rss?menuNo=200083",
+        "동경사무소": "https://www.bok.or.kr/portal/bbs/P0002229/news.rss?menuNo=200084",
+        "런던사무소": "https://www.bok.or.kr/portal/bbs/P0002231/news.rss?menuNo=200085",
+        "북경사무소": "https://www.bok.or.kr/portal/bbs/P0002232/news.rss?menuNo=200086",
+        "홍콩주재원": "https://www.bok.or.kr/portal/bbs/P0002233/news.rss?menuNo=200087",
+        "상해주재원": "https://www.bok.or.kr/portal/bbs/P0002234/news.rss?menuNo=200088"
+    }
+
+}
