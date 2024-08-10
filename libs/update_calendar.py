@@ -17,7 +17,8 @@ class UPDATER:
 
     @staticmethod
     def update_events(service, csv_file,
-                      calendar_id: str = '00f7efaef0c7f43b99139b9a62b682bd3307b962aa36e015069c8aaae10aebaa@group.calendar.google.com'):
+                      calendar_id: str = '00f7efaef0c7f43b99139b9a62b682bd3307b962aa36e015069c8aaae10aebaa@group.calendar.google.com',
+                      verbose=False):
 
         if isinstance(csv_file, pd.DataFrame):
             df = csv_file
@@ -66,16 +67,6 @@ class UPDATER:
                     'timeZone': 'Asia/Seoul'
                 }
 
-            # 기존 일정 검색
-            existing_events = service.events().list(
-                calendarId=calendar_id,
-                q=event_summary,  # 제목으로 검색
-                timeMin=f"{event_start_date}T{event_start_time or '00:00'}:00+09:00",  # 시작 시간으로 검색 범위 설정
-                timeMax=f"{event_end_date}T{event_end_time or '23:59'}:00+09:00",  # 종료 시간으로 검색 범위 설정
-                singleEvents=True,
-                orderBy='startTime'
-            ).execute()
-
             # 이벤트 데이터 설정
             event = {
                 'summary': event_summary,
@@ -86,20 +77,43 @@ class UPDATER:
                 'reminders': reminders,  # 리마인더가 있을 경우만 포함됨
             }
 
-            # 기존 일정이 있으면 업데이트, 없으면 새로 생성
-            updated = False
+            # 기존 일정 검색
+            existing_events = service.events().list(
+                calendarId=calendar_id,
+                q=event_summary,  # 제목으로 검색
+                timeMin=f"{event_start_date}T{event_start_time or '00:00'}:00+09:00",  # 시작 시간으로 검색 범위 설정
+                timeMax=f"{event_end_date}T{event_end_time or '23:59'}:00+09:00",  # 종료 시간으로 검색 범위 설정
+                singleEvents=True,
+                orderBy='startTime'
+            ).execute()
 
+            # 기존 일정이 있으면 업데이트
+            updated = False
             for existing_event in existing_events.get('items', []):
                 if existing_event['summary'] == event_summary:
-                    event_id = existing_event['id']
-                    service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
-                    print(f"Event updated: {existing_event.get('htmlLink')}")
-                    updated = True
-                    break
+                    # Check if event details are the same
+                    if (existing_event.get('description', '') == event_description and
+                            existing_event.get('location', '') == event_location and
+                            existing_event.get('start', {}) == start and
+                            existing_event.get('end', {}) == end and
+                            existing_event.get('reminders', {}) == reminders):
+                        if verbose:
+                            print(f"No update required for event: {existing_event.get('htmlLink')}")
+                        updated = True
+                        break
+                    else:
+                        event_id = existing_event['id']
+                        service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
+                        if verbose:
+                            print(f"Event updated: {existing_event.get('htmlLink')}")
+                        updated = True
+                        break
 
+            # 기존 일정이 없으면 새로 생성
             if not updated:
                 created_event = service.events().insert(calendarId=calendar_id, body=event).execute()
-                print(f"Event created: {created_event.get('htmlLink')}")
-
-        print("Finish updating")
+                if verbose:
+                    print(f"Event created: {created_event.get('htmlLink')}")
+        if verbose:
+            print("Finish updating")
         return None
