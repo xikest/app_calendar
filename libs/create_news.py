@@ -108,23 +108,24 @@ class WebScraper:
         soup = BeautifulSoup(content, 'html.parser')
 
         # Extracting the title, link, and date
-        title_elements = soup.find_all('h2', class_=title_class)
-        date_elements = soup.find_all('span', class_=date_class)
-
+        content_elements = soup.find_all('div', class_="news-cont")
         df_news_info = pd.DataFrame()
-        for title_element, date_element in zip(title_elements, date_elements):
-            title = title_element.get_text(strip=True)
-            link = title_element.find('a')['href']
-            date_text = date_element.get_text(strip=True)
+        for content in content_elements:
+            try:
+                title_element = content.find('h2', class_=title_class)
+                title = title_element.get_text(strip=True)
+                link = title_element.find('a')['href']
+                date_element = content.find('span', class_=date_class)
+                date_text = date_element.get_text(strip=True)
+            except Exception as e:
+                continue
             if not link:
                 continue  # Skip if no link is found
-            # Apply retrim to the title
             title = WebScraper.re_trim(title)
             try:
                 date = pd.to_datetime(date_text.split(" ")[0])  # 2024.07.06 07:03
             except:
                 date = datetime.now()
-
             df_news_info = pd.concat([df_news_info, pd.DataFrame(data=[[title, link, date]])])
         df_news_info.columns = ['title', 'link', 'date']
         return df_news_info

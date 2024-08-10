@@ -31,10 +31,9 @@ class RssFeed:
                             '&ct=ga&cd')[0]
                         title = html.unescape(feed.get('title'))
                         title = re.sub(r'<[^>]*>', '', title)
-                    title = RssFeed.re_trim(title)
+                    # title = RssFeed.re_trim(title)
                     df = pd.DataFrame([[title, published, link]], columns=["title", "published", "link"])
                     df_calendar = pd.concat([df_calendar, df], ignore_index=True)
-
         if convert_format_google:
             df_calendar = RssFeed.convert_to_google_calendar_format(df_calendar)
         return df_calendar
@@ -50,7 +49,7 @@ class RssFeed:
 
     @staticmethod
     def re_trim(text: str):
-        return text.replace("[현지정보]", "").replace("[동향분석]", "")
+        return text.replace("[현지정보]", "").replace("[동향분석]", "").replace("(현지정보)", "")
 
     @staticmethod
     def convert_to_google_calendar_format(df):
