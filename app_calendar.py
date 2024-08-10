@@ -18,7 +18,7 @@ async def main():
     news_web = NewsFeed(json_path="news.json")
     news_rss = RssFeed(json_path="rss_news.json")
     sony_feed = RssFeed(json_path="rss_sony.json")
-    
+
     while True:
         token_path = 'token.pickle'
         df_economic_calendar = economic_calendar.get_calendar_info()
