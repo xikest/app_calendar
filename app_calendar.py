@@ -13,6 +13,7 @@ async def main():
     calendar_rss = os.environ.get("CALENDAR_RSS")
     calendar_news = os.environ.get("CALENDAR_NEWS")
     calendar_sony = os.environ.get("CALENDAR_SONY")
+
     economic_calendar = ECONOMIC_CALENDAR(enable_headless=enable_headless)
     economic_rss = RssFeed(json_path="json/rss.json")
     news_web = NewsFeed(json_path="json/news.json")
@@ -25,7 +26,6 @@ async def main():
         df_economic_rss = economic_rss.get_rss_info()
         df_news_web = news_web.get_news_info()
         df_news_rss = news_rss.get_rss_info()
-        print(df_news_rss)
         df_sony = sony_feed.get_rss_info()
 
         service = UPDATER.authenticate(token_path=token_path)
