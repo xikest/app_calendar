@@ -11,11 +11,13 @@ class NewsFeed:
         with open(json_path, 'r', encoding='utf-8') as file:
             self.news_dict = json.load(file)
 
-    def get_news_info(self, convert_format_google=True) -> pd.DataFrame:
+    def get_news_info(self, convert_format_google=True) -> dict:
+        dict_news = {}
         # Extracting the details from the JSON
-        all_news_info = pd.DataFrame()
+        df_all_news_info = pd.DataFrame()
         for category, news_source in self.news_dict.items():
             # Extracting the details from the JSON
+            calendar_id = news_source['calendar_id']
             news_url = news_source['url']
             class_key = news_source['class_key']
             query_suffix = news_source.get("query_suffix")
@@ -32,20 +34,22 @@ class NewsFeed:
 
                     if category == 'web':
                         scraper = WebScraper()
-                        news_info = scraper.get_info(
+                        df_news_info = scraper.get_info(
                             url=paginated_url,
                             position_class = class_key['position'],
                             title_class=class_key['title'],
                             date_class=class_key['date'],
                         )
-                        all_news_info = pd.concat([all_news_info, news_info], ignore_index=True)
+                        df_all_news_info = pd.concat([df_all_news_info, df_news_info], ignore_index=True)
             except Exception as e:
                 if self.verbose:
                     print(f"Error processing {e}")
 
         if convert_format_google:
-            all_news_info = NewsFeed.convert_to_google_calendar_format(all_news_info)
-        return all_news_info
+            df_all_news_info = NewsFeed.convert_to_google_calendar_format(df_all_news_info)
+        dict_news[calendar_id] = df_all_news_info
+
+        return dict_news
 
     @staticmethod
     def convert_to_google_calendar_format(df):

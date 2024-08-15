@@ -1,0 +1,11 @@
+{  
+    "web":
+  { "calendar_id": "1df8fb38b15fcf0ac035452fbdfc53770309986d5a8a473de8228870590c1895@group.calendar.google.com",
+    "url": "https://www.hankyung.com/reporter/48",
+    "class_key": {
+      "position": "news-cont",
+      "title": "news-tit",
+      "date": "txt-date"
+    }
+  }
+}

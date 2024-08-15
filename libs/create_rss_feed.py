@@ -4,46 +4,66 @@ import json
 import html
 import re
 
-
 class RssFeed:
-    def __init__(self, json_path: str):
+    def __init__(self, json_path: str, verbose=False):
+        self.verbose = verbose
+        
         with open(json_path, 'r', encoding='utf-8') as file:
-            self.rss_dict = json.load(file)
+            self.profile_dict = json.load(file)
 
-    def get_rss_info(self, convert_format_google=True) -> pd.DataFrame:
+
+
+
+    def get_rss_info(self, convert_format_google:bool=True) -> dict:
+        dict_feed = {}
         title = "title"
         published = "published"
         link = "link"
-        df_calendar = pd.DataFrame(columns=[title, published, link])
+        df_feed = pd.DataFrame(columns=[title, published, link])
 
-        for category, details in self.rss_dict.items():
-            for src, url in details.items():
-                for feed in feedparser.parse(url).entries:
-                    if category == 'web':
-                        published = pd.to_datetime(feed.get("published"))
-                        link = feed.get("link")
-                        title = feed.get("title")
-                        if RssFeed.skip(src, title):
-                            continue
-                    elif category == 'google':
-                        published = pd.to_datetime(feed.get("published"))
-                        link = feed.get('link').replace('https://www.google.com/url?rct=j&sa=t&url=', '').split(
-                            '&ct=ga&cd')[0]
-                        title = html.unescape(feed.get('title'))
-                        title = re.sub(r'<[^>]*>', '', title)
-                    # title = RssFeed.re_trim(title)
-                    df = pd.DataFrame([[title, published, link]], columns=["title", "published", "link"])
-                    df_calendar = pd.concat([df_calendar, df], ignore_index=True)
-        if convert_format_google:
-            df_calendar = RssFeed.convert_to_google_calendar_format(df_calendar)
-        return df_calendar
+        for category, details in self.profile_dict.items():
+            calendar_id = details.get('calendar_id', '')
+            contents = details.get('contents', {})
+            for src, urls in contents.items():
+                if isinstance(urls, dict):  # Check if `urls` is a dictionary of feed URLs
+                    for feed_name, url in urls.items():
+                        if self.verbose:
+                            print(f"Processing feed '{feed_name}' from source '{src}' at URL: {url}")
+
+                        # Parse the RSS feed
+                        feed = feedparser.parse(url)
+
+                        for entry in feed.entries:
+                            published_date = pd.to_datetime(entry.get("published", pd.NaT))
+                            link = entry.get("link", '')
+                            title = entry.get("title", '')
+
+                            if src == 'rss':
+                                if RssFeed.skip(feed_name, title):
+                                    continue
+                            elif src == 'google':
+                                link = link.replace('https://www.google.com/url?rct=j&sa=t&url=', '').split('&ct=ga&cd')[0]
+                                title = html.unescape(title)
+                                title = re.sub(r'<[^>]*>', '', title)
+
+                            if self.verbose:
+                                print(category, title, published_date, link)
+
+                            # Add new row to the DataFrame
+                            df = pd.DataFrame([[title, published_date, link]], columns=[title, published, link])
+                            df_feed = pd.concat([df_feed, df], ignore_index=True)
+            if convert_format_google:
+                df_feed = RssFeed.convert_to_google_calendar_format(df_feed)
+            
+            dict_feed[calendar_id] = df_feed
+        return dict_feed
 
     @staticmethod
-    def skip(src, title):
-        if src == "sony":
-            skip_list = ["Notice", "Stock"]
+    def skip(feed_name, title):
+        if feed_name.lower() == "sony":
+            skip_list = ["notice", "stock"]
             for skip_word in skip_list:
-                if skip_word in title:
+                if skip_word in title.lower():
                     return True
         return False
 
@@ -56,21 +76,13 @@ class RssFeed:
         # Define the structure of the Google Calendar DataFrame
         calendar_df = pd.DataFrame(columns=[
             'Subject', 'Start Date', 'Start Time', 'End Date', 'End Time', 'Description', 'Location', 'All Day Event',
-            # 'Reminder'
         ])
 
         for index, row in df.iterrows():
-            # Extract date and time from the 'published' field
             start_date = row['published'].strftime('%Y-%m-%d')
-
-            # Set the event subject and description
             subject = row['title']
             description = f"More information: {row['link']}"
-
-            # Set the end time as 1 hour after the start time
             end_date = start_date
-
-            # No specific location, all-day event is False, reminder set to 1440 minutes (1 day before)
             location = ''
             all_day_event = 'True'
 

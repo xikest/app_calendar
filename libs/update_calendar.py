@@ -35,11 +35,12 @@ class UPDATER:
             event_description = row['Description']
             event_location = row['Location']
 
+            # print(row['Start Date'])
+
             reminder_minutes = row.get('Reminder', None)
             reminders = {'useDefault': True}
             if reminder_minutes is not None:
                 reminders = {'useDefault': False, 'overrides': [{'method': 'popup', 'minutes': reminder_minutes}]}
-
             # 종일 일정인지 시간 일정인지 확인
             if not event_start_time and not event_end_time:
                 start = {
@@ -63,9 +64,10 @@ class UPDATER:
                 is_all_day = False
 
             # 기존 이벤트 검색 (종일 일정이든 시간 일정이든 모두 포함)
-            time_min = f"{event_start_date}T00:00:00+09:00"
-            time_max = f"{event_end_date}T23:59:59+09:00"
+            time_min = f"{event_start_date}T09:00:00+09:00"  
+            time_max = f"{event_end_date}T23:59:59+09:00"  
 
+            # 해당 날짜의 모든 일정 가져오기
             existing_events = service.events().list(
                 calendarId=calendar_id,
                 q=event_summary,
@@ -84,25 +86,29 @@ class UPDATER:
                 'reminders': reminders,
             }
 
-            updated = False
+            create = True
+            
             for existing_event in existing_events.get('items', []):
                 # 기존 이벤트가 종일 일정인지 시간 일정인지 확인
-                existing_is_all_day = 'date' in existing_event['start']
-                existing_start = existing_event['start'].get('date') or existing_event['start'].get('dateTime')
-                existing_end = existing_event['end'].get('date') or existing_event['end'].get('dateTime')
-
-                # 종일 일정이면 날짜만 비교
+                existing_is_all_day = 'date' in existing_event['start'] # 종일 일정인지? 
+                existing_start = existing_event['start'].get('date') or existing_event['start'].get('dateTime') ##날짜 또는 시간 받아오기
+                existing_end = existing_event['end'].get('date') or existing_event['end'].get('dateTime') ##날짜 또는 시간 받아오기
+                
                 if is_all_day and existing_is_all_day:
                     existing_start_date = datetime.strptime(existing_start, '%Y-%m-%d').date()
                     existing_end_date = datetime.strptime(existing_end, '%Y-%m-%d').date()
-                    if existing_event['summary'] == event_summary and \
+
+                    
+                    if existing_event['summary'].strip() == event_summary.strip() and \
                             existing_start_date == datetime.strptime(event_start_date, '%Y-%m-%d').date() and \
-                            existing_end_date == datetime.strptime(event_end_date, '%Y-%m-%d').date():
+                            existing_end_date == datetime.strptime(event_end_date, '%Y-%m-%d').date() and\
+                            existing_event['descrtion'].strip() == event_description.strip():
+                    
                         event_id = existing_event['id']
-                        service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
+                        service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute() # 업데이트
                         if verbose:
                             print(f"Event updated: {existing_event.get('htmlLink')}")
-                        updated = True
+                        create = False
                         break
                 # 시간 일정이면 시간까지 포함해 비교
                 elif not is_all_day and not existing_is_all_day:
@@ -111,17 +117,19 @@ class UPDATER:
                     new_start_datetime = datetime.strptime(f"{event_start_date}T{event_start_time}:00", '%Y-%m-%dT%H:%M:%S')
                     new_end_datetime = datetime.strptime(f"{event_end_date}T{event_end_time}:00", '%Y-%m-%dT%H:%M:%S')
 
-                    if existing_event['summary'] == event_summary and \
+                    if existing_event['summary'].strip() == event_summary.strip() and \
                             existing_start_datetime == new_start_datetime and \
-                            existing_end_datetime == new_end_datetime:
+                            existing_end_datetime == new_end_datetime and\
+                            existing_event['descrtion'].strip() == event_description.strip():
+                        # print("existing, no allday")
                         event_id = existing_event['id']
-                        service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
+                        service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute() # 업데이트
                         if verbose:
                             print(f"Event updated: {existing_event.get('htmlLink')}")
-                        updated = True
+                        create = False
                         break
 
-            if not updated:
+            if create:
                 created_event = service.events().insert(calendarId=calendar_id, body=event).execute()
                 if verbose:
                     print(f"Event created: {created_event.get('htmlLink')}")
