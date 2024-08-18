@@ -11,17 +11,12 @@ class RssFeed:
         with open(json_path, 'r', encoding='utf-8') as file:
             self.profile_dict = json.load(file)
 
-
-
-
-    def get_rss_info(self, convert_format_google:bool=True) -> dict:
+    def get_rss_info(self, convert_format_google: bool=True) -> dict:
         dict_feed = {}
-        title = "title"
-        published = "published"
-        link = "link"
-        df_feed = pd.DataFrame(columns=[title, published, link])
+
 
         for category, details in self.profile_dict.items():
+            df_calendar = pd.DataFrame(columns=['title', 'published', 'link'])
             calendar_id = details.get('calendar_id', '')
             contents = details.get('contents', {})
             for src, urls in contents.items():
@@ -32,30 +27,26 @@ class RssFeed:
 
                         # Parse the RSS feed
                         feed = feedparser.parse(url)
-
                         for entry in feed.entries:
-                            published_date = pd.to_datetime(entry.get("published", pd.NaT))
+                            entry_title = entry.get("title", '')
                             link = entry.get("link", '')
-                            title = entry.get("title", '')
-
+                            published_date = pd.to_datetime(entry.get("published", pd.NaT))
                             if src == 'rss':
-                                if RssFeed.skip(feed_name, title):
+                                if RssFeed.skip(feed_name, entry_title):
                                     continue
                             elif src == 'google':
                                 link = link.replace('https://www.google.com/url?rct=j&sa=t&url=', '').split('&ct=ga&cd')[0]
-                                title = html.unescape(title)
-                                title = re.sub(r'<[^>]*>', '', title)
-
+                                entry_title = html.unescape(entry_title)
+                                entry_title = re.sub(r'<[^>]*>', '', entry_title)
                             if self.verbose:
-                                print(category, title, published_date, link)
-
+                                print(category, entry_title, published_date, link)
                             # Add new row to the DataFrame
-                            df = pd.DataFrame([[title, published_date, link]], columns=[title, published, link])
-                            df_feed = pd.concat([df_feed, df], ignore_index=True)
+                            df = pd.DataFrame([[entry_title, published_date, link]], columns=['title', 'published', 'link'])
+                            df_calendar = pd.concat([df_calendar, df], ignore_index=True)
+                            
             if convert_format_google:
-                df_feed = RssFeed.convert_to_google_calendar_format(df_feed)
-            
-            dict_feed[calendar_id] = df_feed
+                df_calendar = RssFeed.convert_to_google_calendar_format(df_calendar)
+            dict_feed[calendar_id] = df_calendar
         return dict_feed
 
     @staticmethod
@@ -73,7 +64,6 @@ class RssFeed:
 
     @staticmethod
     def convert_to_google_calendar_format(df):
-        # Define the structure of the Google Calendar DataFrame
         calendar_df = pd.DataFrame(columns=[
             'Subject', 'Start Date', 'Start Time', 'End Date', 'End Time', 'Description', 'Location', 'All Day Event',
         ])
@@ -86,7 +76,6 @@ class RssFeed:
             location = ''
             all_day_event = 'True'
 
-            # Create a new event entry
             new_event = pd.DataFrame([{
                 'Subject': subject,
                 'Start Date': start_date,
@@ -98,7 +87,6 @@ class RssFeed:
                 'All Day Event': all_day_event,
             }])
 
-            # Add the new event to the calendar DataFrame
             calendar_df = pd.concat([calendar_df, new_event], ignore_index=True)
 
         return calendar_df

@@ -1,6 +1,6 @@
 {
     "news": {
-        "calendar_id": "1df8fb38b15fcf0ac035452fbdfc53770309986d5a8a473de8228870590c1895@group.calendar.google.com",
+        "calendar_id": "38f37d69c8cf255dd1f147c07b5f51adacc0f15a096cbcf28cc6280ccb5580fa@group.calendar.google.com",
         "contents": {
             "google": {
                 "김리안의 에네르기파WAR": "https://www.google.co.kr/alerts/feeds/11305193269230284098/10051269404088993743",
@@ -10,26 +10,20 @@
         }
     },
     "economist": {
-        "calendar_id": "eb28deb37361cce5503c6645fdc1daf13750e3516ea77625766077eadf147c51@group.calendar.google.com",
+        "calendar_id": "62aaecd113a35f01835993ebb9bf3ed92d120580ecd28bbeead77cc9c2f9a227@group.calendar.google.com",
         "contents": {
             "rss": {
                 "the-world-this-week": "https://www.economist.com/the-world-this-week/rss.xml",
-                "leaders": "https://www.economist.com/leaders/rss.xml",
-                "letter": "https://www.economist.com/letters/rss.xml",
                 "special-report": "https://www.economist.com/special-report/rss.xml",
                 "briefing": "https://www.economist.com/briefing/rss.xml",
-                "business": "https://www.economist.com/business/rss.xml",
-                "finance-and-economics": "https://www.economist.com/finance-and-economics/rss.xml",
                 "graphic": "https://www.economist.com/graphic-detail/rss.xml",
                 "indicators": "https://www.economist.com/economic-and-financial-indicators/rss.xml",
-                "USA": "https://www.economist.com/united-states/rss.xml",
-                "china": "https://www.economist.com/china/rss.xml",
                 "economist-explains": "https://www.economist.com/the-economist-explains/rss.xml"
             }
         }
     },
     "wsj": {
-        "calendar_id": "9b4a1405ca8a69e05451f0b6344c028a52158bb596546e683bc1156a14b45860@group.calendar.google.com",
+        "calendar_id": "f355b7f271e826834ee5f107820232eddf107515212de7ed912530de40e04ef9@group.calendar.google.com",
         "contents": {
             "rss": {
                 "world": "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
@@ -40,7 +34,7 @@
         }
     },
     "bok": {
-        "calendar_id": "9577b923906641a50a7f571ad51dd451b6164fde3cf89b94ea39a01dbb8f6441@group.calendar.google.com",
+        "calendar_id": "28b39f8bdbcab973c019d5634ce3fcb573296d0850d621c20738162cd34ac40f@group.calendar.google.com",
         "contents": {
             "rss": {
                 "뉴욕사무소": "https://www.bok.or.kr/portal/bbs/P0002221/news.rss?menuNo=200081",
@@ -55,7 +49,7 @@
         }
     },
     "SONY": {
-        "calendar_id": "f22761799dd696109a45b11a7403196546f16b74e575ff7a9940e026be0183b6@group.calendar.google.com",
+        "calendar_id": "0c227a75e976c06994e8cc15eef5de98e25fe384b65d057b9edbbb37a7ed7efc@group.calendar.google.com",
         "contents": {
             "rss": {
                 "SONY": "https://www.sony.com/en/SonyInfo/IR/rss/rss.xml"
