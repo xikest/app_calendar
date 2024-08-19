@@ -48,6 +48,14 @@
             }
         }
     },
+    "EIA": {
+        "calendar_id": "c01186feec22ad6f0574561095ba3854c621a383097fcca5df7cbe48b9a607c1@group.calendar.google.com",
+        "contents": {
+            "rss": {
+                "EIA": "https://www.eia.gov/rss/todayinenergy.xml"
+            }
+        }
+    },
     "SONY": {
         "calendar_id": "0c227a75e976c06994e8cc15eef5de98e25fe384b65d057b9edbbb37a7ed7efc@group.calendar.google.com",
         "contents": {

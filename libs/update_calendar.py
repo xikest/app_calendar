@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import pickle
 from datetime import datetime
+import time
 
 class UPDATER:
     @staticmethod
@@ -114,6 +115,7 @@ class UPDATER:
                 if verbose:
                     print(f"Event created: {created_event.get('htmlLink')}")
 
+            time.sleep(1)
         if verbose:
             print("Finish updating")
         return None

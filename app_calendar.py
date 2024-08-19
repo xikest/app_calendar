@@ -1,7 +1,8 @@
 import asyncio
+import platform
 from libs import UPDATER
 from libs import ECONOMIC_CALENDAR, RssFeed, NewsFeed
-import platform
+
 
 async def main():
     enable_headless = True
@@ -31,6 +32,7 @@ async def main():
 
         for calendar_id, df_calendar in dict_all_calendar.items():
             UPDATER.update_events(service, csv_file=df_calendar, calendar_id=calendar_id)
+            
             
         print(f"Waiting for {wait_hour} hours...")
         await asyncio.sleep(wait_hour * 60 * 60)  # 24 hours in seconds
