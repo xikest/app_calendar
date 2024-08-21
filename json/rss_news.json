@@ -17,8 +17,7 @@
                 "special-report": "https://www.economist.com/special-report/rss.xml",
                 "briefing": "https://www.economist.com/briefing/rss.xml",
                 "graphic": "https://www.economist.com/graphic-detail/rss.xml",
-                "indicators": "https://www.economist.com/economic-and-financial-indicators/rss.xml",
-                "economist-explains": "https://www.economist.com/the-economist-explains/rss.xml"
+                "indicators": "https://www.economist.com/economic-and-financial-indicators/rss.xml"
             }
         }
     },
