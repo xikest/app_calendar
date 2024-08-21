@@ -26,7 +26,6 @@
         "calendar_id": "f355b7f271e826834ee5f107820232eddf107515212de7ed912530de40e04ef9@group.calendar.google.com",
         "contents": {
             "rss": {
-                "world": "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
                 "USBusiness": "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
                 "Markets": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
                 "technology": "https://feeds.a.dj.com/rss/RSSWSJD.xml"

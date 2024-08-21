@@ -110,16 +110,25 @@ class ECONOMIC_CALENDAR(Scraper):
         return rows
 
     def _navigate_pages(self, driver):
-        try:
-            next_page = driver.find_element(By.XPATH, "//div[@class='paging']//a[text()='다음']")
-            if "disabled" in next_page.get_attribute("class"):
+
+            try:
+                for attempt in range(2):
+                    try:
+                        next_page = driver.find_element(By.XPATH, "//div[@class='paging']//a[text()='다음']")
+                        if "disabled" in next_page.get_attribute("class"):
+                            return False
+                        next_page.click()
+                        time.sleep(self.wait_time)
+                        return True
+                    except NoSuchElementException:
+                        self.logger.warning(f"Attempt {attempt + 1}: 'Next' button not found. Retrying...")
+                        continue
+                
+                self.logger.error("Failed to navigate to the next page after 2 attempts.")
                 return False
-            next_page.click()
-            time.sleep(self.wait_time)
-            return True
-        except NoSuchElementException:
-            self.logger.info("No more pages to navigate.")
-            return False
+            except NoSuchElementException:
+                self.logger.error("No more pages to navigate.")
+                return False
 
     def _select_all_countries(self, driver):
         WebDriverWait(driver, 10).until(
@@ -161,7 +170,7 @@ class ECONOMIC_CALENDAR(Scraper):
 
             location = row['국가']
             all_day_event = 'False'
-            reminder = '1440'
+            reminder = '10'
 
             new_event = pd.DataFrame([{
                 'Subject': subject,

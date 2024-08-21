@@ -16,7 +16,7 @@ async def main():
         
         dict_all_calendar = {}
         try:
-            economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json", enable_headless=enable_headless, verbose=True)        
+            economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json", enable_headless=enable_headless, verbose=False)        
             dict_calendar = economic_calendar.get_calendar_info()
             dict_all_calendar.update(dict_calendar)
         except:
@@ -25,7 +25,7 @@ async def main():
         dict_calendar = news_rss.get_rss_info()
         dict_all_calendar.update(dict_calendar)
         
-        news_web = NewsFeed(json_path="json/web_news.json", verbose=True)
+        news_web = NewsFeed(json_path="json/web_news.json", verbose=False)
         dict_calendar = news_web.get_news_info()
         dict_all_calendar.update(dict_calendar)
         
