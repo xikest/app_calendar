@@ -16,7 +16,7 @@ async def main():
         
         dict_all_calendar = {}
         try:
-            economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json", enable_headless=enable_headless, verbose=False)        
+            economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json", enable_headless=enable_headless, verbose=True)        
             dict_calendar = economic_calendar.get_calendar_info()
             dict_all_calendar.update(dict_calendar)
         except:

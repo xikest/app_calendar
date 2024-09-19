@@ -76,9 +76,11 @@ class ECONOMIC_CALENDAR(Scraper):
 
             df_calendar = pd.DataFrame(rows).drop(2, axis=1)
             df_calendar.columns = headers
-
+            if self.verbose:
+                df_calendar.to_csv("calendar.csv")
             if convert_format_google:
                 df_calendar = self._convert_to_google_calendar_format(df_calendar)
+                
             return {self.calendar_id: df_calendar}
 
         except Exception as e:

@@ -42,7 +42,8 @@ class RssFeed:
                                 print(category, entry_title, published_date, link)
                             # Add new row to the DataFrame
                             df = pd.DataFrame([[entry_title, published_date, link]], columns=['title', 'published', 'link'])
-                            df_calendar = pd.concat([df_calendar, df], ignore_index=True)
+                            if not df.empty:    
+                                df_calendar = pd.concat([df_calendar, df], ignore_index=True)
                             
             if convert_format_google:
                 df_calendar = RssFeed.convert_to_google_calendar_format(df_calendar)
