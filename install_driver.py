@@ -1,4 +1,5 @@
-from tools.web import Installer
+from tools.installer import Installer
+
 
 def main():
     Installer.install_chrome_and_driver()
