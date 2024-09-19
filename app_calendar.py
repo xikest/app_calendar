@@ -5,10 +5,10 @@ from libs import ECONOMIC_CALENDAR, RssFeed, NewsFeed
 
 
 async def main():
-    enable_headless = True
     wait_hour = 1
 
-    if platform.system() == "Linux": enable_headless = True
+    if platform.system() == "Linux": 
+        enable_headless = True
 
     while True:
         token_path = 'token.pickle'
@@ -16,7 +16,7 @@ async def main():
         
         dict_all_calendar = {}
         try:
-            economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json", enable_headless=enable_headless, verbose=True)        
+            economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json")        
             dict_calendar = economic_calendar.get_calendar_info()
             dict_all_calendar.update(dict_calendar)
         except:
@@ -30,7 +30,7 @@ async def main():
             pass
         
         try:
-            news_web = NewsFeed(json_path="json/web_news.json", verbose=False)
+            news_web = NewsFeed(json_path="json/web_news.json")
             dict_calendar = news_web.get_news_info()
             dict_all_calendar.update(dict_calendar)
         except:
