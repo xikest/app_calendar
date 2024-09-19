@@ -21,18 +21,26 @@ async def main():
             dict_all_calendar.update(dict_calendar)
         except:
             pass
-        news_rss = RssFeed(json_path="json/rss_news.json")
-        dict_calendar = news_rss.get_rss_info()
-        dict_all_calendar.update(dict_calendar)
         
-        news_web = NewsFeed(json_path="json/web_news.json", verbose=False)
-        dict_calendar = news_web.get_news_info()
-        dict_all_calendar.update(dict_calendar)
+        try:
+            news_rss = RssFeed(json_path="json/rss_news.json")
+            dict_calendar = news_rss.get_rss_info()
+            dict_all_calendar.update(dict_calendar)
+        except:
+            pass
         
+        try:
+            news_web = NewsFeed(json_path="json/web_news.json", verbose=False)
+            dict_calendar = news_web.get_news_info()
+            dict_all_calendar.update(dict_calendar)
+        except:
+            pass
 
         for calendar_id, df_calendar in dict_all_calendar.items():
-            UPDATER.update_events(service, csv_file=df_calendar, calendar_id=calendar_id)
-            
+            try: 
+                UPDATER.update_events(service, csv_file=df_calendar, calendar_id=calendar_id)
+            except:
+                continue
             
         print(f"Waiting for {wait_hour} hours...")
         await asyncio.sleep(wait_hour * 60 * 60)  # 24 hours in seconds

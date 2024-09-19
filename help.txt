@@ -43,8 +43,20 @@ chmod +x install_env.sh
 ./install_env.sh
 
 
+
+
 ## github 클론
 git clone https://github.com/xikest/app_calendar.git
 ## 클론 삭제
 rm -rf app_calendar
 
+
+## 가상 환경 접속
+source bot_env/app_calendar/bin/activate
+
+## 가상 환경 생성
+
+python3 -m venv app_calendar
+
+
+sudo apt install python3.12-venv
