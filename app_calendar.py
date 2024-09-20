@@ -43,7 +43,7 @@ async def main():
                 continue
             
         print(f"Waiting for {wait_hour} hours...")
-        await asyncio.sleep(wait_hour * 60 * 60)  # 24 hours in seconds
+        await asyncio.sleep(wait_hour * 60 * 60)  # 1 hours in seconds
 
 if __name__ == '__main__':
     asyncio.run(main())
