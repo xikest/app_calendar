@@ -42,9 +42,10 @@ class NewsFeed:
                         )
                         df_all_news_info = pd.concat([df_all_news_info, df_news_info], ignore_index=True)
             except Exception as e:
-                if self.verbose:
+                if self.verbose == True:
                     print(f"Error processing {e}")
-
+        if self.verbose == True:
+            df_all_news_info.to_excel("df_all_news_info.xlsx")
         if convert_format_google:
             df_all_news_info = NewsFeed.convert_to_google_calendar_format(df_all_news_info)
         dict_news[calendar_id] = df_all_news_info

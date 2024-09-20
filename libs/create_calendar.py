@@ -38,13 +38,13 @@ class ECONOMIC_CALENDAR(Scraper):
                 # 페이지 번호 탐색 및 데이터 수집
                 paging_elements = driver.find_elements(By.XPATH, "//div[@class='paging']//a[not(contains(@class, 'btn_'))]")
                 page_numbers = [elem.text for elem in paging_elements if elem.text.isdigit()]
-                if self.verbose:
+                if self.verbose == True:
                     print(page_numbers)
                 
                 for page_number in page_numbers:
                     for cnt in range(5):  # 5번까지 재시도 가능
                         try:
-                            if self.verbose:
+                            if self.verbose == True:
                                 print(f"Navigating to page {page_number}")
 
                             page = driver.find_element(By.XPATH, f"//div[@class='paging']//a[text()='{page_number}']")
@@ -54,7 +54,7 @@ class ECONOMIC_CALENDAR(Scraper):
                             rows.extend(self._extract_table_data(driver))
                             break
                         except Exception as e:
-                            if self.verbose:
+                            if self.verbose == True:
                                 print(f"page {page_number}, try {cnt + 1}/5")
                                 driver.save_screenshot(f"try_error_page{page_number}.png")
                                 print(e)
@@ -76,8 +76,8 @@ class ECONOMIC_CALENDAR(Scraper):
 
             df_calendar = pd.DataFrame(rows).drop(2, axis=1)
             df_calendar.columns = headers
-            if self.verbose:
-                df_calendar.to_csv("calendar.csv")
+            if self.verbose == True:
+                df_calendar.to_excel("e_calendar.xlsx")
             if convert_format_google:
                 df_calendar = self._convert_to_google_calendar_format(df_calendar)
                 
