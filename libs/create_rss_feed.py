@@ -30,7 +30,12 @@ class RssFeed:
                         for entry in feed.entries:
                             entry_title = entry.get("title", '')
                             link = entry.get("link", '')
-                            published_date = pd.to_datetime(entry.get("published", pd.NaT))
+                            published = entry.get("published", pd.NaT)
+                            # 초가 하나만 있을 경우 ":0"을 ":00"으로 수정
+                            if isinstance(published, str) and published.endswith(":0"):
+                                published += "0"
+                            published_date = pd.to_datetime(published, errors='coerce')
+
                             if src == 'rss':
                                 if RssFeed.skip(feed_name, entry_title):
                                     continue
@@ -43,7 +48,8 @@ class RssFeed:
                             # Add new row to the DataFrame
                             df = pd.DataFrame([[entry_title, published_date, link]], columns=['title', 'published', 'link'])
                             if not df.empty:    
-                                df_calendar = pd.concat([df_calendar, df], ignore_index=True)
+                                df_calendar = pd.concat([df_calendar, df], ignore_index=True, copy=False)
+
                             
             if convert_format_google:
                 df_calendar = RssFeed.convert_to_google_calendar_format(df_calendar)
