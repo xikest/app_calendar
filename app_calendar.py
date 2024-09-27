@@ -2,7 +2,9 @@ import asyncio
 import platform
 from libs import UPDATER
 from libs import ECONOMIC_CALENDAR, RssFeed, NewsFeed
+import warnings
 
+warnings.filterwarnings('ignore')
 
 async def main():
     wait_hour = 1
