@@ -10,11 +10,10 @@ async def main():
     verbose = False
     if platform.system() == "Linux": 
         enable_headless = True
-
-    while True:
-        token_path = 'token.pickle'
-        service = UPDATER.authenticate(token_path=token_path)
         
+    token_path = 'token.pickle'
+    service = UPDATER.authenticate(token_path=token_path)
+    while True:
         dict_all_calendar = {}
         try:
             economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json",enable_headless=enable_headless, verbose=verbose)        
