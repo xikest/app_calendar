@@ -3,6 +3,7 @@ python3 install_driver.py
 ## 실행하기
 nohup python3 -u app_calendar.py > log_app.log 2>&1
 
+nohup python3 -u app_calendar.py > /dev/null 2>&1 &
 
 #실행 중인 쉘 확인 아래는 bot 키워드
 ps -ef|grep app
@@ -28,11 +29,11 @@ rm -rf app_calendar
 
 
 ## 가상 환경 접속
-source bot_env/app_calendar/bin/activate
+source bot_venv/app_calendar/bin/activate
 
 ## 가상 환경 생성
 
-python3 -m venv app_calendar
+python3 -m venv bot_venv/app_calendar
 sudo apt install python3.12-venv
 
 

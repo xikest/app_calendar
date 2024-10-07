@@ -70,7 +70,8 @@
                 "wsj.com":"https,://www.google.co.kr/alerts/feeds/11305193269230284098/18127131672278427985",
                 "statista.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/6223885041825883770",
                 "vox.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/13822686793692500264",
-                "counterpointresearch":"https://www.google.co.kr/alerts/feeds/11305193269230284098/9562111934276341527"
+                "counterpointresearch":"https://www.google.co.kr/alerts/feeds/11305193269230284098/9562111934276341527",
+                "avforums.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/7711383473666114653"
             }
         }
     }
