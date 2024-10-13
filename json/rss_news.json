@@ -58,7 +58,9 @@
         "calendar_id": "0c227a75e976c06994e8cc15eef5de98e25fe384b65d057b9edbbb37a7ed7efc@group.calendar.google.com",
         "contents": {
             "rss": {
-                "SONY": "https://www.sony.com/en/SonyInfo/IR/rss/rss.xml"
+                "SONY": "https://www.sony.com/en/SonyInfo/IR/rss/rss.xml",
+                "SONY support":"https://www.youtube.com/feeds/videos.xml?channel_id=UC3Ylq6PWIvWufi4CRrXm80A",
+                "SONY official":"https://www.youtube.com/feeds/videos.xml?channel_id=UCDCIVTeg-_V-xmFV8kAkblg"
             },
             "google": {
                 "techradar.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/10884613516806591901",

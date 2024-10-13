@@ -50,7 +50,6 @@ class ECONOMIC_CALENDAR(Scraper):
                             page = driver.find_element(By.XPATH, f"//div[@class='paging']//a[text()='{page_number}']")
                             page.click()
                             time.sleep(self.wait_time)
-
                             rows.extend(self._extract_table_data(driver))
                             break
                         except Exception as e:
@@ -90,17 +89,12 @@ class ECONOMIC_CALENDAR(Scraper):
 
     def _initialize_driver(self, driver):
         driver.get(self.base_url)
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//iframe[@src='https://asp.zeroin.co.kr/eco/hkd/wei/0601.php']"))
-        )
         driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@src='https://asp.zeroin.co.kr/eco/hkd/wei/0601.php']"))
         self._select_all_countries(driver)
         self._click_this_month(driver)
 
     def _extract_headers(self, driver):
-        table = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//div[@class='tab_cnts']//table"))
-        )
+        table = driver.find_element(By.XPATH, "//div[@class='tab_cnts']//table")
         return [th.text for th in table.find_elements(By.XPATH, ".//thead//th")]
 
     def _extract_table_data(self, driver):
@@ -133,9 +127,9 @@ class ECONOMIC_CALENDAR(Scraper):
                 return False
 
     def _select_all_countries(self, driver):
-        WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[@class='btn_nation open_bodPop']"))
-        ).click()
+        button = driver.find_element(By.XPATH, "//button[@class='btn_nation open_bodPop']")
+        time.sleep(self.wait_time)
+        button.click() 
         time.sleep(self.wait_time)
         driver.find_element(By.XPATH, "//input[@name='chk_all']").click()
         time.sleep(self.wait_time)
