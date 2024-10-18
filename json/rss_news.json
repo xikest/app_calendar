@@ -59,8 +59,14 @@
         "contents": {
             "rss": {
                 "SONY": "https://www.sony.com/en/SonyInfo/IR/rss/rss.xml",
-                "SONY support":"https://www.youtube.com/feeds/videos.xml?channel_id=UC3Ylq6PWIvWufi4CRrXm80A",
-                "SONY official":"https://www.youtube.com/feeds/videos.xml?channel_id=UCDCIVTeg-_V-xmFV8kAkblg"
+                "SONY support filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UC3Ylq6PWIvWufi4CRrXm80A",
+                "SONY official filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCDCIVTeg-_V-xmFV8kAkblg",
+                "Digital Trends filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UC8wXC0ZCfGt3HaVLy_fdTQw",
+                "RTINGS Home Theater filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCAi6GKtTPoYxUheIbVhnwqw",
+                "Abt Electronics filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UClFPdTOI8x3pR8qwcpAa_vA",
+                "Tech Steve filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCmHO0Rw7nBFK2233om_vyWA",
+                "Stop the FOMO filtered": "https://www.youtube.com/feeds/videos.xml?channel_id=UCqHuvvETx7PKapuchT2BnSA"
+
             },
             "google": {
                 "techradar.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/10884613516806591901",
@@ -73,7 +79,10 @@
                 "statista.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/6223885041825883770",
                 "vox.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/13822686793692500264",
                 "counterpointresearch":"https://www.google.co.kr/alerts/feeds/11305193269230284098/9562111934276341527",
-                "avforums.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/7711383473666114653"
+                "avsforums.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/7711383473666114653",
+                "theshortcut.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/10449212244971732055",
+                "ign.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/3041804264441903662",
+                "wired.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/16412324331342078503"
             }
         }
     }

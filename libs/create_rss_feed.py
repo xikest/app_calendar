@@ -77,7 +77,7 @@ class RssFeed:
             if any(word in title for word in skip_words):
                 return True
         
-        if feed_name in ["sony support", "sony official"]:
+        if "filtered" in feed_name:
             if "bravia" not in title:
                 return True
         
