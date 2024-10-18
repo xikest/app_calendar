@@ -79,15 +79,11 @@
                 "statista.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/6223885041825883770",
                 "vox.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/13822686793692500264",
                 "counterpointresearch":"https://www.google.co.kr/alerts/feeds/11305193269230284098/9562111934276341527",
-<<<<<<< HEAD
                 "avsforums.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/7711383473666114653",
                 "theshortcut.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/10449212244971732055",
                 "ign.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/3041804264441903662",
-                "wired.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/16412324331342078503"
-=======
-                "avforums.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/7711383473666114653",
+                "wired.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/16412324331342078503",
                 "flatpanelshd":"https://www.google.co.kr/alerts/feeds/11305193269230284098/2922377286333081695"
->>>>>>> 86eb4bc183047a7bbc566841e170e8cc3f30727b
             }
         }
     }
