@@ -35,6 +35,8 @@ class WebDriver:
         # --headless = chrome
         chrome_options.add_argument('--no-sandbox')  # 헤드리스 크롬 브라우저를 "사용자 네임스페이스" 옵션 없이 실행하도록 설정
         chrome_options.add_argument('--disable-dev-shm-usage')
+        chrome_options.add_argument("--enable-logging")  # 로그 활성화
+        chrome_options.add_argument("--v=1")  # 로그 레벨 설정
 
 
         # chrome_options.add_argument('lang=ko_kr')  # 브라우저 언어

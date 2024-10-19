@@ -17,7 +17,6 @@ class Scraper:
         """
 
         self.webdriver_path: str
-        self.webdriver_path: str
         self.intput_folder: Path
         self.output_folder: Path
         self.output_xlsx_name = None

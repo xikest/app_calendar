@@ -15,6 +15,9 @@ python3 install_auth_token.py
 
 ## 설치 하기
 python3 install_driver.py
+sudo apt-get update
+sudo apt-get install --reinstall libnss3 libnspr4
+
 
 
 ## 패키지 목록에서 설치
@@ -39,3 +42,33 @@ sudo apt install python3.12-venv
 
 ## 패키지 목록 저장
 pip freeze > requirements.txt
+
+
+python3  app_calendar.py 
+
+
+
+# 우분투 패키지 설치
+sudo apt-get update
+sudo apt-get install -y \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdbus-1-3 \
+    libgdk-pixbuf2.0-0 \
+    libglib2.0-0 \
+    libnspr4 \
+    libnss3 \
+    libxss1 \
+    libxrandr2 \
+    libgbm1 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxi6 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrender1 \
+    libxtst6 \
+    libpango1.0-0 \
+    libjpeg62-turbo \
+    libasound2
