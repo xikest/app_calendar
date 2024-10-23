@@ -2,9 +2,12 @@ from google.auth import default
 from googleapiclient.discovery import build
 from libs import UPDATER, ECONOMIC_CALENDAR, RssFeed, NewsFeed
 import logging
-
+from fastapi import FastAPI
+import uvicorn
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
+
+app = FastAPI()
 
 # Google Calendar API 인증
 def authenticate():
@@ -18,7 +21,8 @@ def authenticate():
         logging.error(f"Authentication failed: {e}")
         return None
 
-def main():
+@app.post("/run")
+def run_calendar():
     enable_headless = True
     verbose = False        
 
@@ -78,5 +82,5 @@ def main():
     logging.info("All tasks completed.")
 
 if __name__ == '__main__':
-    main()
+    uvicorn.run(app, host="0.0.0.0", port=8000)
     
