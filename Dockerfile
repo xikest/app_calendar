@@ -6,4 +6,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 EXPOSE 8000
-CMD ["python", "app_calendar.py"]
+CMD ["uvicorn", "app_calendar:app", "--host", "0.0.0.0", "--port", "8000"]
+
+    
