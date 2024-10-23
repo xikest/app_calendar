@@ -1,51 +1,82 @@
-import asyncio
-import platform
-from libs import UPDATER
-from libs import ECONOMIC_CALENDAR, RssFeed, NewsFeed
-import warnings
+from google.auth import default
+from googleapiclient.discovery import build
+from libs import UPDATER, ECONOMIC_CALENDAR, RssFeed, NewsFeed
+import logging
 
-warnings.filterwarnings('ignore')
+# 로깅 설정
+logging.basicConfig(level=logging.INFO)
 
-async def main():
-    wait_hour = 1
+# Google Calendar API 인증
+def authenticate():
+    try:
+        # Cloud Run의 기본 서비스 계정 인증 사용
+        credentials, project = default(scopes=['https://www.googleapis.com/auth/calendar'])
+        service = build('calendar', 'v3', credentials=credentials)
+        logging.info("Successfully authenticated Google Calendar service.")
+        return service
+    except Exception as e:
+        logging.error(f"Authentication failed: {e}")
+        return None
+
+def main():
     enable_headless = True
-    verbose = False
-    if platform.system() == "Linux": 
-        enable_headless = True
-        
-    token_path = 'token.pickle'
-    service = UPDATER.authenticate(token_path=token_path)
-    while True:
-        dict_all_calendar = {}
-        try:
-            economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json",enable_headless=enable_headless, verbose=verbose)        
-            dict_calendar = economic_calendar.get_calendar_info()
-            dict_all_calendar.update(dict_calendar)
-        except:
-            pass
-        
-        try:
-            news_rss = RssFeed(json_path="json/rss_news.json", verbose=verbose)    
-            dict_calendar = news_rss.get_rss_info()
-            dict_all_calendar.update(dict_calendar)
-        except:
-            pass
-        
-        try:
-            news_web = NewsFeed(json_path="json/web_news.json", verbose=verbose)    
-            dict_calendar = news_web.get_news_info()
-            dict_all_calendar.update(dict_calendar)
-        except:
-            pass
+    verbose = False        
 
-        for calendar_id, df_calendar in dict_all_calendar.items():
-            try: 
-                UPDATER.update_events(service, csv_file=df_calendar, calendar_id=calendar_id, verbose=verbose)
-            except:
-                continue
-            
-        print(f"Waiting for {wait_hour} hours...")
-        await asyncio.sleep(wait_hour * 60 * 60)  # 1 hours in seconds
+    logging.info("Authenticating Google Calendar service...")
+    service = authenticate()
+    
+    # token_path = 'token.pickle'
+    # logging.info("Authenticating Google Calendar service...")
+    # service = UPDATER.authenticate(token_path=token_path)
+    
+    if service is None:
+        logging.error("Failed to authenticate Google Calendar service. Exiting...")
+        return
+
+    dict_all_calendar = {}
+
+    # 경제 캘린더 정보 가져오기
+    try:
+        logging.info("Fetching economic calendar information...")
+        economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json", enable_headless=enable_headless, verbose=verbose)        
+        dict_calendar = economic_calendar.get_calendar_info()
+        dict_all_calendar.update(dict_calendar)
+        logging.info("Economic calendar information fetched successfully.")
+    except Exception as e:
+        logging.error(f"Error fetching economic calendar information: {e}")
+    
+    # 뉴스 RSS 정보 가져오기
+    try:
+        logging.info("Fetching news RSS information...")
+        news_rss = RssFeed(json_path="json/rss_news.json", verbose=verbose)    
+        dict_calendar = news_rss.get_rss_info()
+        dict_all_calendar.update(dict_calendar)
+        logging.info("News RSS information fetched successfully.")
+    except Exception as e:
+        logging.error(f"Error fetching news RSS information: {e}")
+    
+    # 웹 뉴스 정보 가져오기
+    try:
+        logging.info("Fetching news web information...")
+        news_web = NewsFeed(json_path="json/web_news.json", verbose=verbose)    
+        dict_calendar = news_web.get_news_info()
+        dict_all_calendar.update(dict_calendar)
+        logging.info("News web information fetched successfully.")
+    except Exception as e:
+        logging.error(f"Error fetching news web information: {e}")
+
+    # 모든 캘린더에 이벤트 업데이트
+    for calendar_id, df_calendar in dict_all_calendar.items():
+        try: 
+            logging.info(f"Updating events for calendar ID: {calendar_id}...")
+            # CSV 파일 대신 df_calendar 데이터를 사용하는 경우 추가 처리 필요
+            UPDATER.update_events(service, csv_file=df_calendar, calendar_id=calendar_id, verbose=verbose)
+            logging.info(f"Events updated successfully for calendar ID: {calendar_id}.")
+        except Exception as e:
+            logging.error(f"Error updating events for calendar ID '{calendar_id}': {e}")
+        
+    logging.info("All tasks completed.")
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    main()
+    

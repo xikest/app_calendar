@@ -1,8 +1,6 @@
-import platform
 from pathlib import Path
 from datetime import date
-import os
-from .webdriver import WebDriver
+from tools.web import WebDriver
 
 
 class Scraper:
@@ -15,30 +13,15 @@ class Scraper:
         intput_folder_path = "input",
         output_folder_path="results"
         """
-
-        self.webdriver_path: str
+        
         self.intput_folder: Path
         self.output_folder: Path
         self.output_xlsx_name = None
 
-        self._set_scraper_path()
         self.set_data_path(export_prefix=export_prefix, intput_folder_path=intput_folder_path,
                            output_folder_path=output_folder_path)
-
-        self.web_driver = WebDriver(executable_path=self.webdriver_path, browser_path=self.browser_path,
-                                    headless=enable_headless)
+        self.web_driver = WebDriver(headless=enable_headless)
         self.wait_time = 1
-
-    def _set_scraper_path(self):
-        current_os = platform.system()
-        self.webdriver_path = "./tools/chromedriver/chromedriver.exe"
-        self.browser_path = "./tools/chrome/chrome.exe"
-
-        if current_os == "Linux":
-            self.webdriver_path = "./tools/chromedriver/chromedriver"
-            self.browser_path = "./tools/chrome/chrome"
-            self.webdriver_path = os.path.abspath(self.webdriver_path)
-            self.browser_path = os.path.abspath(self.browser_path)
 
     def set_data_path(self, export_prefix: str = None, intput_folder_path: str = None, output_folder_path: str = None):
         if intput_folder_path is not None:

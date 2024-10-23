@@ -4,7 +4,7 @@ import json
 import html
 import re
 from dateutil import parser
-
+import logging
 
 
 class RssFeed:
@@ -17,54 +17,62 @@ class RssFeed:
     def get_rss_info(self, convert_format_google: bool=True) -> dict:
         dict_feed = {}
 
-
         for category, details in self.profile_dict.items():
             df_calendar = pd.DataFrame(columns=['title', 'published', 'link'])
             calendar_id = details.get('calendar_id', '')
             contents = details.get('contents', {})
-            for src, urls in contents.items():
-                if isinstance(urls, dict):  # Check if `urls` is a dictionary of feed URLs
-                    for feed_name, url in urls.items():
-                        if self.verbose == True:
-                            print(f"Processing feed '{feed_name}' from source '{src}' at URL: {url}")
-
-                        # Parse the RSS feed
-                        feed = feedparser.parse(url)
-                        for entry in feed.entries:
-                            entry_title = entry.get("title", '')
-                            link = entry.get("link", '')
-                            parsed_date = parser.parse(entry.get("published", pd.NaT)).strftime('%Y-%m-%d %H:%M:%S')
-                            published_date = pd.to_datetime(parsed_date)
-                            if src == 'rss':
-                                if RssFeed.skip(feed_name, entry_title):
-                                    continue
-                            elif src == 'google':
-                                link = link.replace('https://www.google.com/url?rct=j&sa=t&url=', '').split('&ct=ga&cd')[0]
-                                entry_title = html.unescape(entry_title)
-                                entry_title = re.sub(r'<[^>]*>', '', entry_title)
-                            # if self.verbose == True:
-                            #     print(category, entry_title, published_date, link)
-                            df = pd.DataFrame([[entry_title, published_date, link]], columns=['title', 'published', 'link'])
-                            
-                            df_calendar = pd.concat([df_calendar, df], ignore_index=True)
             
+            for src, urls in contents.items():
+                if isinstance(urls, dict):
+                    for feed_name, url in urls.items():
+                        if self.verbose:
+                            logging.info(f"Processing feed '{feed_name}' from source '{src}' at URL: {url}")
+
+                        try:
+                            # Parse the RSS feed
+                            feed = feedparser.parse(url)
+                            for entry in feed.entries:
+                                entry_title = entry.get("title", '')
+                                link = entry.get("link", '')
+                                parsed_date = parser.parse(entry.get("published", pd.NaT)).strftime('%Y-%m-%d %H:%M:%S')
+                                published_date = pd.to_datetime(parsed_date)
+
+                                if src == 'rss':
+                                    if RssFeed.skip(feed_name, entry_title):
+                                        continue
+                                elif src == 'google':
+                                    link = link.replace('https://www.google.com/url?rct=j&sa=t&url=', '').split('&ct=ga&cd')[0]
+                                    entry_title = html.unescape(entry_title)
+                                    entry_title = re.sub(r'<[^>]*>', '', entry_title)
+
+                                    logging.info(f"{category} - Title: {entry_title}, Published Date: {published_date}, Link: {link}")
+
+                                df = pd.DataFrame([[entry_title, published_date, link]], columns=['title', 'published', 'link'])
+                                df_calendar = pd.concat([df_calendar, df], ignore_index=True)
+
+                        except Exception as e:
+                            logging.error(f"Error processing feed '{feed_name}' from source '{src}': {e}", exc_info=True)
+
             if convert_format_google:
                 df_calendar = RssFeed.convert_to_google_calendar_format(df_calendar)
+
             if calendar_id in dict_feed:
                 df_existing = dict_feed[calendar_id]
                 df_updated = df_existing.combine_first(df_calendar)  
                 dict_feed[calendar_id] = df_updated
             else:
                 dict_feed[calendar_id] = df_calendar
-            if self.verbose == True:
+
+            if self.verbose:
                 try:
                     with pd.ExcelWriter("rss_calendar.xlsx", engine='openpyxl') as writer:
                         for calendar_id, df_calendar in dict_feed.items():
                             sheet_name = re.sub(r'[\\/*?[\]:]', '', str(calendar_id))[:31]
                             df_calendar.to_excel(writer, sheet_name=sheet_name, index=False)
                 except Exception as e:
-                    print(e)
-                    raise ValueError
+                    logging.error(f"Error writing to Excel: {e}", exc_info=True)
+                    raise ValueError("Failed to write to Excel file.")
+
         return dict_feed
 
     @staticmethod

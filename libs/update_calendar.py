@@ -4,6 +4,7 @@ import os
 import pickle
 from datetime import datetime
 import time
+import logging
 
 class UPDATER:
     @staticmethod
@@ -12,7 +13,12 @@ class UPDATER:
         if os.path.exists(token_path):
             with open(token_path, 'rb') as token:
                 creds = pickle.load(token)
+        else:
+            logging.error(f"Token file '{token_path}' not found.")
+            return None
+            
         service = build('calendar', 'v3', credentials=creds)
+        logging.info("Google Calendar service authenticated.")
         return service
 
     @staticmethod
@@ -21,7 +27,7 @@ class UPDATER:
             df = csv_file
         elif isinstance(csv_file, str):
             if not os.path.exists(csv_file):
-                print(f"Error: CSV file '{csv_file}' not found.")
+                logging.error(f"Error: CSV file '{csv_file}' not found.")
                 return
             df = pd.read_csv(csv_file)
         else:
@@ -69,7 +75,7 @@ class UPDATER:
                 'end': end,
                 'reminders': reminders,
             }
-            
+
             create = True
             for existing_event in existing_events.get('items', []):
                 existing_is_all_day = 'date' in existing_event['start']
@@ -88,7 +94,7 @@ class UPDATER:
                             event_id = existing_event['id']
                             service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
                             if verbose:
-                                print(f"Event updated: {existing_event.get('htmlLink')}")
+                                logging.info(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (All Day Event)")
                         create = False
                         break
 
@@ -106,16 +112,16 @@ class UPDATER:
                             event_id = existing_event['id']
                             service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
                             if verbose:
-                                print(f"Event updated: {existing_event.get('htmlLink')}")
+                                logging.info(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (Timed Event)")
                         create = False
                         break
 
             if create:
                 created_event = service.events().insert(calendarId=calendar_id, body=event).execute()
                 if verbose:
-                    print(f"Event created: {created_event.get('htmlLink')}")
+                    logging.info(f"Event created: {created_event.get('htmlLink')} - {event_summary}")
 
             time.sleep(1)
         if verbose:
-            print("Finish updating")
+            logging.info("Finished updating events.")
         return None
