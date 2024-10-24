@@ -36,7 +36,7 @@ class ECONOMIC_CALENDAR(Scraper):
                 for page_number in page_numbers:
                     for cnt in range(5):  # 5번까지 재시도 가능
                         try:
-                            logging.debug(f"Navigating to page {page_number}")
+                            logging.info(f"Navigating to page {page_number}")
 
                             page = driver.find_element(By.XPATH, f"//div[@class='paging']//a[text()='{page_number}']")
                             page.click()
@@ -44,7 +44,7 @@ class ECONOMIC_CALENDAR(Scraper):
                             rows.extend(self._extract_table_data(driver))
                             break
                         except Exception as e:
-                            logging.debug(f"page {page_number}, try {cnt + 1}/5")
+                            logging.info(f"page {page_number}, try {cnt + 1}/5")
                             driver.save_screenshot(f"try_error_page{page_number}.png")
                             logging.error(e)
                             driver.quit()  # 드라이버 재시작

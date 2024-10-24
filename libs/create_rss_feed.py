@@ -26,7 +26,7 @@ class RssFeed:
                 if isinstance(urls, dict):  # Check if `urls` is a dictionary of feed URLs
                     for feed_name, url in urls.items():
 
-                        logging.debug(f"Processing feed '{feed_name}' from source '{src}' at URL: {url}")
+                        logging.info(f"Processing feed '{feed_name}' from source '{src}' at URL: {url}")
 
                         # Parse the RSS feed
                         feed = feedparser.parse(url)
@@ -43,7 +43,7 @@ class RssFeed:
                                 entry_title = html.unescape(entry_title)
                                 entry_title = re.sub(r'<[^>]*>', '', entry_title)
 
-                            logging.debug(f"{category}, {entry_title}, {published_date}, {link}")
+                            logging.info(f"{category}, {entry_title}, {published_date}, {link}")
                             df = pd.DataFrame([[entry_title, published_date, link]], columns=['title', 'published', 'link'])
                             
                             df_calendar = pd.concat([df_calendar, df], ignore_index=True)
