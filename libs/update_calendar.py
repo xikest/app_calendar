@@ -9,17 +9,25 @@ import logging
 class UPDATER:
     @staticmethod
     def authenticate(token_path: str = 'token.pickle'):
-        creds = None
-        if os.path.exists(token_path):
-            with open(token_path, 'rb') as token:
-                creds = pickle.load(token)
-        else:
-            logging.error(f"Token file '{token_path}' not found.")
-            return None
-            
-        service = build('calendar', 'v3', credentials=creds)
-        logging.info("Google Calendar service authenticated.")
-        return service
+        try:
+            if token_path is None:
+                credentials, project = default(scopes=['https://www.googleapis.com/auth/calendar'])
+                service = build('calendar', 'v3', credentials=credentials)
+            else:
+                if os.path.exists(token_path):
+                    with open(token_path, 'rb') as token:
+                        credentials = pickle.load(token)
+                else:
+                    logging.error(f"Token file '{token_path}' not found.")
+                    return None
+            service = build('calendar', 'v3', credentials=credentials)
+            logging.info("Successfully authenticated Google Calendar service.")
+            return service
+        except Exception as e:
+                logging.error(f"Authentication failed: {e}")
+                return None
+
+
 
     @staticmethod
     def update_events(service, csv_file, calendar_id: str, verbose: bool = False):

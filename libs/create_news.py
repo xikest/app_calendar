@@ -121,7 +121,7 @@ class WebScraper:
                 except Exception as e:
                     logging.warning(f"Error parsing date '{date_text}': {e}")
                     date = datetime.now()
-                
+                logging.debug(f"{title}, {link}, {date}")
                 df_news_info = pd.concat([df_news_info, pd.DataFrame(data=[[title, link, date]])])
 
             df_news_info.columns = ['title', 'link', 'date']

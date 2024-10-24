@@ -3,9 +3,7 @@ import time
 import json
 import logging
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException
 from libs._scaper_scheme import Scraper
 
 class ECONOMIC_CALENDAR(Scraper):
@@ -34,7 +32,6 @@ class ECONOMIC_CALENDAR(Scraper):
                 # 페이지 번호 탐색 및 데이터 수집
                 paging_elements = driver.find_elements(By.XPATH, "//div[@class='paging']//a[not(contains(@class, 'btn_'))]")
                 page_numbers = [elem.text for elem in paging_elements if elem.text.isdigit()]
-                logging.debug(page_numbers)
                 
                 for page_number in page_numbers:
                     for cnt in range(5):  # 5번까지 재시도 가능
@@ -84,7 +81,7 @@ class ECONOMIC_CALENDAR(Scraper):
         driver.get(self.base_url)
         driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@src='https://asp.zeroin.co.kr/eco/hkd/wei/0601.php']"))
         # self._select_all_countries(driver)
-        self._click_this_month(driver)
+        # self._click_this_month(driver)
 
     def _extract_headers(self, driver):
         table = driver.find_element(By.XPATH, "//div[@class='tab_cnts']//table")

@@ -42,8 +42,8 @@ class RssFeed:
                                 link = link.replace('https://www.google.com/url?rct=j&sa=t&url=', '').split('&ct=ga&cd')[0]
                                 entry_title = html.unescape(entry_title)
                                 entry_title = re.sub(r'<[^>]*>', '', entry_title)
-                            # if self.verbose == True:
-                            #     print(category, entry_title, published_date, link)
+
+                            logging.debug(f"{category}, {entry_title}, {published_date}, {link}")
                             df = pd.DataFrame([[entry_title, published_date, link]], columns=['title', 'published', 'link'])
                             
                             df_calendar = pd.concat([df_calendar, df], ignore_index=True)

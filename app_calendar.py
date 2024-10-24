@@ -8,16 +8,7 @@ logging.basicConfig(level=logging.DEBUG)  # DEBUG로 설정하면 모든 로그 
 app = FastAPI()
 
 # Google Calendar API 인증
-def authenticate():
-    try:
-        # Cloud Run의 기본 서비스 계정 인증 사용
-        credentials, project = default(scopes=['https://www.googleapis.com/auth/calendar'])
-        service = build('calendar', 'v3', credentials=credentials)
-        logging.info("Successfully authenticated Google Calendar service.")
-        return service
-    except Exception as e:
-        logging.error(f"Authentication failed: {e}")
-        return None
+
 
 @app.post("/run")
 def run_calendar():
@@ -25,7 +16,7 @@ def run_calendar():
     verbose = False        
 
     logging.info("Authenticating Google Calendar service...")
-    service = authenticate()
+    service = UPDATER.authenticate()
     
     # token_path = 'token.pickle'
     # logging.info("Authenticating Google Calendar service...")
@@ -37,15 +28,15 @@ def run_calendar():
 
     dict_all_calendar = {}
 
-    # 경제 캘린더 정보 가져오기
-    try:
-        logging.info("Fetching economic calendar information...")
-        economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json", enable_headless=enable_headless, verbose=verbose)        
-        dict_calendar = economic_calendar.get_calendar_info()
-        dict_all_calendar.update(dict_calendar)
-        logging.info("Economic calendar information fetched successfully.")
-    except Exception as e:
-        logging.error(f"Error fetching economic calendar information: {e}")
+    # # 경제 캘린더 정보 가져오기
+    # try:
+    #     logging.info("Fetching economic calendar information...")
+    #     economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json", enable_headless=enable_headless, verbose=verbose)        
+    #     dict_calendar = economic_calendar.get_calendar_info()
+    #     dict_all_calendar.update(dict_calendar)
+    #     logging.info("Economic calendar information fetched successfully.")
+    # except Exception as e:
+    #     logging.error(f"Error fetching economic calendar information: {e}")
     
     # 뉴스 RSS 정보 가져오기
     try:
