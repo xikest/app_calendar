@@ -96,10 +96,8 @@ class RssFeed:
         for index, row in df.iterrows():
             start_date = row['published'].strftime('%Y-%m-%d')
             subject = row['title']
-            description = f"More information: {row['link']}"
-            end_date = (row['published'] + timedelta(days=1)).strftime('%Y-%m-%d')  # 다음 날로 설정
-            
-            #end_date = start_date
+            description = f"More information: {row['link']}"           
+            end_date = start_date
             location = ''
             all_day_event = 'True'
 
