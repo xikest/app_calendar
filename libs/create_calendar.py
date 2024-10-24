@@ -3,6 +3,8 @@ import time
 import json
 import logging
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from libs._scaper_scheme import Scraper
 
@@ -14,12 +16,8 @@ class ECONOMIC_CALENDAR(Scraper):
         self.verbose = verbose
 
         with open(json_path, 'r', encoding='utf-8') as file:
-            profile_dict = json.load(file)
-            self.calendar_id = profile_dict.get("calendar_id")
-
-        # 로깅 설정
-        logging.basicConfig(level=logging.DEBUG)  # DEBUG로 설정하면 모든 로그 메시지가 출력됨
-        self.logger = logging.getLogger(__name__)
+            prifile_dict = json.load(file)
+            self.calendar_id = prifile_dict.get("calendar_id")
 
     def get_calendar_info(self, convert_format_google=True) -> pd.DataFrame:
         headers = None
@@ -36,20 +34,22 @@ class ECONOMIC_CALENDAR(Scraper):
                 # 페이지 번호 탐색 및 데이터 수집
                 paging_elements = driver.find_elements(By.XPATH, "//div[@class='paging']//a[not(contains(@class, 'btn_'))]")
                 page_numbers = [elem.text for elem in paging_elements if elem.text.isdigit()]
-                self.logger.info(f"Found page numbers: {page_numbers}")
-
+                logging.debug(page_numbers)
+                
                 for page_number in page_numbers:
                     for cnt in range(5):  # 5번까지 재시도 가능
                         try:
-                            self.logger.info(f"Navigating to page {page_number}")
+                            logging.debug(f"Navigating to page {page_number}")
+
                             page = driver.find_element(By.XPATH, f"//div[@class='paging']//a[text()='{page_number}']")
                             page.click()
                             time.sleep(self.wait_time)
                             rows.extend(self._extract_table_data(driver))
                             break
                         except Exception as e:
-                            self.logger.error(f"Error navigating to page {page_number}, attempt {cnt + 1}/5: {e}")
+                            logging.debug(f"page {page_number}, try {cnt + 1}/5")
                             driver.save_screenshot(f"try_error_page{page_number}.png")
+                            logging.error(e)
                             driver.quit()  # 드라이버 재시작
                             driver = self.web_driver.get_chrome()  
                             self._initialize_driver(driver)
@@ -68,23 +68,22 @@ class ECONOMIC_CALENDAR(Scraper):
 
             df_calendar = pd.DataFrame(rows).drop(2, axis=1)
             df_calendar.columns = headers
-            # if self.verbose:
-            #     df_calendar.to_excel("e_calendar.xlsx")
-            #     self.logger.info("Calendar data exported to e_calendar.xlsx.")
+            if self.verbose == True:
+                df_calendar.to_excel("e_calendar.xlsx")
             if convert_format_google:
                 df_calendar = self._convert_to_google_calendar_format(df_calendar)
                 
             return {self.calendar_id: df_calendar}
 
         except Exception as e:
-            self.logger.error(f"An error occurred while getting calendar info: {e}")
+            logging.error(f"An error occurred: {e}")
         finally:
             driver.quit()
 
     def _initialize_driver(self, driver):
         driver.get(self.base_url)
         driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@src='https://asp.zeroin.co.kr/eco/hkd/wei/0601.php']"))
-        self._select_all_countries(driver)
+        # self._select_all_countries(driver)
         self._click_this_month(driver)
 
     def _extract_headers(self, driver):
@@ -100,25 +99,25 @@ class ECONOMIC_CALENDAR(Scraper):
         return rows
 
     def _navigate_pages(self, driver):
-        try:
-            for attempt in range(2):
-                try:
-                    next_page = driver.find_element(By.XPATH, "//div[@class='paging']//a[text()='다음']")
-                    if "disabled" in next_page.get_attribute("class"):
-                        self.logger.info("No more pages to navigate.")
-                        return False
-                    next_page.click()
-                    time.sleep(self.wait_time)
-                    return True
-                except NoSuchElementException:
-                    self.logger.warning(f"Attempt {attempt + 1}: 'Next' button not found. Retrying...")
-                    continue
-            
-            self.logger.error("Failed to navigate to the next page after 2 attempts.")
-            return False
-        except NoSuchElementException:
-            self.logger.error("No more pages to navigate.")
-            return False
+
+            try:
+                for attempt in range(2):
+                    try:
+                        next_page = driver.find_element(By.XPATH, "//div[@class='paging']//a[text()='다음']")
+                        if "disabled" in next_page.get_attribute("class"):
+                            return False
+                        next_page.click()
+                        time.sleep(self.wait_time)
+                        return True
+                    except NoSuchElementException:
+                        logging.warning(f"Attempt {attempt + 1}: 'Next' button not found. Retrying...")
+                        continue
+                
+                logging.error("Failed to navigate to the next page after 2 attempts.")
+                return False
+            except NoSuchElementException:
+                logging.error("No more pages to navigate.")
+                return False
 
     def _select_all_countries(self, driver):
         button = driver.find_element(By.XPATH, "//button[@class='btn_nation open_bodPop']")
