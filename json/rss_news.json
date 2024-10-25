@@ -1,6 +1,6 @@
 {
     "news": {
-        "calendar_id": "38f37d69c8cf255dd1f147c07b5f51adacc0f15a096cbcf28cc6280ccb5580fa@group.calendar.google.com",
+        "calendar_id": "dcfc25e59057a1b88d077802a0ec08cff150edff3ca962e8ba4a77b6c0900f60@group.calendar.google.com",
         "contents": {
             "google": {
                 "김리안의 에네르기파WAR": "https://www.google.co.kr/alerts/feeds/11305193269230284098/10051269404088993743",
@@ -9,30 +9,8 @@
             }
         }
     },
-    "economist": {
-        "calendar_id": "62aaecd113a35f01835993ebb9bf3ed92d120580ecd28bbeead77cc9c2f9a227@group.calendar.google.com",
-        "contents": {
-            "rss": {
-                "the-world-this-week": "https://www.economist.com/the-world-this-week/rss.xml",
-                "special-report": "https://www.economist.com/special-report/rss.xml",
-                "briefing": "https://www.economist.com/briefing/rss.xml",
-                "graphic": "https://www.economist.com/graphic-detail/rss.xml",
-                "indicators": "https://www.economist.com/economic-and-financial-indicators/rss.xml"
-            }
-        }
-    },
-    "wsj": {
-        "calendar_id": "f355b7f271e826834ee5f107820232eddf107515212de7ed912530de40e04ef9@group.calendar.google.com",
-        "contents": {
-            "rss": {
-                "USBusiness": "https://feeds.a.dj.com/rss/WSJcomUSBusiness.xml",
-                "Markets": "https://feeds.a.dj.com/rss/RSSMarketsMain.xml",
-                "technology": "https://feeds.a.dj.com/rss/RSSWSJD.xml"
-            }
-        }
-    },
     "bok": {
-        "calendar_id": "28b39f8bdbcab973c019d5634ce3fcb573296d0850d621c20738162cd34ac40f@group.calendar.google.com",
+        "calendar_id": "58521ac8472360f8dc4bf309c6c89d0c8e747efc2583cdf3956a8ce53ba0798f@group.calendar.google.com",
         "contents": {
             "rss": {
                 "뉴욕사무소": "https://www.bok.or.kr/portal/bbs/P0002221/news.rss?menuNo=200081",
@@ -47,7 +25,7 @@
         }
     },
     "EIA": {
-        "calendar_id": "c01186feec22ad6f0574561095ba3854c621a383097fcca5df7cbe48b9a607c1@group.calendar.google.com",
+        "calendar_id": "321b9138e9fb75ab057d29139e0c65abc3e6887667552ec404d0fc8657df072b@group.calendar.google.com",
         "contents": {
             "rss": {
                 "EIA": "https://www.eia.gov/rss/todayinenergy.xml"
