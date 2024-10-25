@@ -6,8 +6,7 @@ from datetime import datetime
 import logging
 
 class NewsFeed:
-    def __init__(self, json_path: str = 'news.json', verbose=False):
-        self.verbose = verbose
+    def __init__(self, json_path: str = 'news.json'):
         with open(json_path, 'r', encoding='utf-8') as file:
             self.news_dict = json.load(file)
 
@@ -38,8 +37,6 @@ class NewsFeed:
             except Exception as e:
                 logging.error(f"Error processing news for category '{category}': {e}", exc_info=True)
         
-        if self.verbose:
-            df_all_news_info.to_excel("df_all_news_info.xlsx")
         
         if convert_format_google:
             df_all_news_info = NewsFeed.convert_to_google_calendar_format(df_all_news_info)
@@ -59,10 +56,9 @@ class NewsFeed:
                     row['date'] = datetime.strptime(row['date'], '%Y-%m-%d')
                 except ValueError:
                     row['date'] = datetime.now()
-
             start_date = row['date'].strftime('%Y-%m-%d')
             subject = row['title']
-            description = f"More information: {row['link']}"
+            description = f"{row['link']}"
             end_date = start_date
             location = ''
             all_day_event = 'True'
@@ -121,7 +117,7 @@ class WebScraper:
                 except Exception as e:
                     logging.warning(f"Error parsing date '{date_text}': {e}")
                     date = datetime.now()
-                logging.info(f"{title}, {link}, {date}")
+                logging.debug(f"{title}, {link}, {date}")
                 df_news_info = pd.concat([df_news_info, pd.DataFrame(data=[[title, link, date]])])
 
             df_news_info.columns = ['title', 'link', 'date']

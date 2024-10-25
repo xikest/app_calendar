@@ -2,16 +2,17 @@ import pandas as pd
 import time
 import json
 import logging
+from bs4 import BeautifulSoup
+from datetime import datetime
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from libs._scaper_scheme import Scraper
 
 class ECONOMIC_CALENDAR(Scraper):
-    def __init__(self, json_path: str, enable_headless=True, wait_time=2, verbose=False):
+    def __init__(self, json_path: str, enable_headless=True, wait_time=2):
         super().__init__(enable_headless=enable_headless)
         self.wait_time = wait_time
         self.base_url = "https://datacenter.hankyung.com/economic-calendar"
-        self.verbose = verbose
 
         with open(json_path, 'r', encoding='utf-8') as file:
             prifile_dict = json.load(file)
@@ -20,53 +21,59 @@ class ECONOMIC_CALENDAR(Scraper):
     def get_calendar_info(self, convert_format_google=True) -> pd.DataFrame:
         headers = None
         rows = []
+        operating = True
         driver = self.web_driver.get_chrome()
 
         try:
             self._initialize_driver(driver)
+            self._select_all_countries(driver)
+            self._click_this_month(driver)
             headers = self._extract_headers(driver)
-
-            while True:
-                rows.extend(self._extract_table_data(driver))
+            loop_cnt = 1
+            while operating:
                 
-                # 페이지 번호 탐색 및 데이터 수집
-                paging_elements = driver.find_elements(By.XPATH, "//div[@class='paging']//a[not(contains(@class, 'btn_'))]")
-                page_numbers = [elem.text for elem in paging_elements if elem.text.isdigit()]
-                
-                for page_number in page_numbers:
-                    for cnt in range(5):  # 5번까지 재시도 가능
-                        try:
-                            logging.info(f"Navigating to page {page_number}")
-
-                            page = driver.find_element(By.XPATH, f"//div[@class='paging']//a[text()='{page_number}']")
-                            page.click()
-                            time.sleep(self.wait_time)
-                            rows.extend(self._extract_table_data(driver))
+                for try_cnt in range(5):  
+                    try: 
+                        paging_div = driver.find_element(By.CLASS_NAME, "paging")
+                        id_links = paging_div.find_elements(By.XPATH, ".//a[@id]")
+                        id_list = [link.get_attribute("id") for link in id_links]
+                        break
+                    except:
+                        continue
+                logging.debug("Extracted IDs: %s", id_list)
+                rows.extend(self._extract_table_data(driver))   #처음페이지
+                driver.save_screenshot(f"page{loop_cnt}.png") 
+                for id in id_list:
+                    for try_cnt in range(5):
+                        try: 
+                            logging.debug(f"Clicking on page: {id}")
+                            nextpage = driver.find_element(By.XPATH, f'//*[@id="{id}"]')
+                            nextpage.click()
+                            time.sleep(10) # wating page loading
                             break
-                        except Exception as e:
-                            logging.info(f"page {page_number}, try {cnt + 1}/5")
-                            driver.save_screenshot(f"try_error_page{page_number}.png")
-                            logging.error(e)
-                            driver.quit()  # 드라이버 재시작
-                            driver = self.web_driver.get_chrome()  
-                            self._initialize_driver(driver)
-                            
-                            # 다음 페이지로 이동하는 부분
-                            next_click = int(page_number) // 10
-                            for _ in range(next_click):
-                                next_page = driver.find_element(By.XPATH, "//div[@class='paging']//a[text()='다음']")
-                                next_page.click()
-                                time.sleep(self.wait_time)
+                        except:
+                            if try_cnt+1 == 5: logging.error(f"page{id} click error")
                             continue
-
-                # 마지막 페이지 탐색 후 종료
-                if not self._navigate_pages(driver):
-                    break
+                    try:
+                        rows.extend(self._extract_table_data(driver))  
+                        # driver.save_screenshot(f"page{id}.png") 
+                    except Exception as e:
+                        logging.error(e)
+                        
+                for try_cnt in range(5):    
+                    try:
+                        next_btn = driver.find_element(By.CLASS_NAME, "btn_next")
+                        next_btn.click()
+                        logging.debug(f"Clicking on next page")
+                        break
+                    except Exception as e:
+                        if try_cnt+1 == 5:
+                                operating = False
+                        continue
+                loop_cnt +=10               
 
             df_calendar = pd.DataFrame(rows).drop(2, axis=1)
             df_calendar.columns = headers
-            if self.verbose == True:
-                df_calendar.to_excel("e_calendar.xlsx")
             if convert_format_google:
                 df_calendar = self._convert_to_google_calendar_format(df_calendar)
                 
@@ -80,57 +87,69 @@ class ECONOMIC_CALENDAR(Scraper):
     def _initialize_driver(self, driver):
         driver.get(self.base_url)
         driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@src='https://asp.zeroin.co.kr/eco/hkd/wei/0601.php']"))
-        # self._select_all_countries(driver)
-        # self._click_this_month(driver)
+
 
     def _extract_headers(self, driver):
         table = driver.find_element(By.XPATH, "//div[@class='tab_cnts']//table")
         return [th.text for th in table.find_elements(By.XPATH, ".//thead//th")]
 
     def _extract_table_data(self, driver):
-        rows = []
-        table = driver.find_element(By.XPATH, "//tbody[@id='tbody_data']")
-        for row in table.find_elements(By.XPATH, ".//tr"):
-            cells = row.find_elements(By.XPATH, ".//td | .//th")
-            rows.append([cell.text.strip() for cell in cells])
-        return rows
-
-    def _navigate_pages(self, driver):
-
+        for _ in range(5):
             try:
-                for attempt in range(2):
-                    try:
-                        next_page = driver.find_element(By.XPATH, "//div[@class='paging']//a[text()='다음']")
-                        if "disabled" in next_page.get_attribute("class"):
-                            return False
-                        next_page.click()
-                        time.sleep(self.wait_time)
-                        return True
-                    except NoSuchElementException:
-                        logging.warning(f"Attempt {attempt + 1}: 'Next' button not found. Retrying...")
-                        continue
-                
-                logging.error("Failed to navigate to the next page after 2 attempts.")
-                return False
-            except NoSuchElementException:
-                logging.error("No more pages to navigate.")
-                return False
+                board_list = driver.find_element(By.XPATH, '/html/body/div[2]/div/table')
+                sub_html = board_list.get_attribute('innerHTML')
+                soup = BeautifulSoup(sub_html, 'html.parser')
+                rows = soup.select('tr')  
+                table_data = []
+                for row in rows:
+                    cells = row.find_all(['td', 'th'])  
+                    row_data = [cell.get_text(strip=True) for cell in cells] 
+                    if row_data:
+                        table_data.append(row_data)
+                for data in table_data:
+                    logging.debug(data)
+                return table_data   
+            except:
+                continue
+
 
     def _select_all_countries(self, driver):
-        button = driver.find_element(By.XPATH, "//button[@class='btn_nation open_bodPop']")
-        time.sleep(self.wait_time)
-        button.click() 
-        time.sleep(self.wait_time)
-        driver.find_element(By.XPATH, "//input[@name='chk_all']").click()
-        time.sleep(self.wait_time)
-        driver.find_element(By.XPATH, "//button[@class='btn_popClose']").click()
-        time.sleep(self.wait_time)
+        for _ in range(5):
+            try:
+                popup_btn = driver.find_element(By.XPATH, "//button[@class='btn_nation open_bodPop']")
+                popup_btn.click() 
+                break
+            except:
+                continue
+            
+        for _ in range(5):
+            try:
+                check_all= driver.find_element(By.XPATH, "//input[@name='chk_all']")
+                check_all.click()
+                break
+            except:
+                continue
+            
+        for _ in range(5):
+            try:
+                close_btn = driver.find_element(By.XPATH, "//button[@class='btn_popClose']")
+                close_btn.click()
+                break
+            except:
+                continue
+        logging.info("selected all countries")
 
     def _click_this_month(self, driver):
-        link = driver.find_element(By.XPATH, "//a[text()='이번 달']")
-        self.web_driver.move_element_to_center(link)
-        driver.execute_script("arguments[0].click();", link)
-        time.sleep(self.wait_time)
+        for _ in range(5):
+            try:
+                link = driver.find_element(By.XPATH, "//a[text()='이번 달']")
+                # self.web_driver.move_element_to_center(link)
+                driver.execute_script("arguments[0].click();", link)
+                logging.info("selected this month")
+                break
+            except:
+                continue
+
 
     def _convert_to_google_calendar_format(self, df):
         df = df[df["중요도"] == "상"]
@@ -141,7 +160,7 @@ class ECONOMIC_CALENDAR(Scraper):
         ])
 
         for index, row in df.iterrows():
-            date_str = row['날짜'].split('\n')[0]
+            date_str = row['날짜'].split('(')[0]
             start_date = pd.to_datetime(date_str, format='%m.%d').strftime('2024-%m-%d')
             start_time = row['시간']
 
@@ -156,7 +175,7 @@ class ECONOMIC_CALENDAR(Scraper):
 
             location = row['국가']
             all_day_event = 'False'
-            reminder = '10'
+            reminder = '' ## 리마인더 안함
 
             new_event = pd.DataFrame([{
                 'Subject': subject,

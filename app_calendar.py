@@ -4,7 +4,7 @@ from libs import UPDATER, ECONOMIC_CALENDAR, RssFeed, NewsFeed
 import logging
 from fastapi import FastAPI
 
-logging.basicConfig(level=logging.DEBUG)  # DEBUG로 설정하면 모든 로그 메시지가 출력됨
+logging.basicConfig(level=logging.INFO)  # DEBUG로 설정하면 모든 로그 메시지가 출력됨
 app = FastAPI()
 
 # Google Calendar API 인증
@@ -28,15 +28,15 @@ def run_calendar():
 
     dict_all_calendar = {}
 
-    # # 경제 캘린더 정보 가져오기
-    # try:
-    #     logging.info("Fetching economic calendar information...")
-    #     economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json", enable_headless=enable_headless, verbose=verbose)        
-    #     dict_calendar = economic_calendar.get_calendar_info()
-    #     dict_all_calendar.update(dict_calendar)
-    #     logging.info("Economic calendar information fetched successfully.")
-    # except Exception as e:
-    #     logging.error(f"Error fetching economic calendar information: {e}")
+    # 경제 캘린더 정보 가져오기
+    try:
+        logging.info("Fetching economic calendar information...")
+        economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json", enable_headless=enable_headless, verbose=verbose)        
+        dict_calendar = economic_calendar.get_calendar_info()
+        dict_all_calendar.update(dict_calendar)
+        logging.info("Economic calendar information fetched successfully.")
+    except Exception as e:
+        logging.error(f"Error fetching economic calendar information: {e}")
     
     # 뉴스 RSS 정보 가져오기
     try:

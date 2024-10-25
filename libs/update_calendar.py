@@ -5,6 +5,7 @@ import pickle
 from datetime import datetime
 import time
 import logging
+from datetime import timedelta
 
 class UPDATER:
     @staticmethod
@@ -59,7 +60,9 @@ class UPDATER:
 
             if is_all_day:
                 start = {'date': event_start_date, 'timeZone': 'Asia/Seoul'}
-                end = {'date': event_end_date, 'timeZone': 'Asia/Seoul'}
+                end = {
+                    'date':  (datetime.strptime(event_start_date, '%Y-%m-%d') + timedelta(days=1)).strftime('%Y-%m-%d'),   'timeZone': 'Asia/Seoul'
+                }
             else:
                 start = {'dateTime': f"{event_start_date}T{event_start_time}:00+09:00", 'timeZone': 'Asia/Seoul'}
                 end = {'dateTime': f"{event_end_date}T{event_end_time}:00+09:00", 'timeZone': 'Asia/Seoul'}
@@ -102,7 +105,7 @@ class UPDATER:
                             event_id = existing_event['id']
                             service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
                             if verbose:
-                                logging.info(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (All Day Event)")
+                                logging.debug(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (All Day Event)")
                         create = False
                         break
 
@@ -120,14 +123,14 @@ class UPDATER:
                             event_id = existing_event['id']
                             service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
                             if verbose:
-                                logging.info(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (Timed Event)")
+                                logging.debug(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (Timed Event)")
                         create = False
                         break
 
             if create:
                 created_event = service.events().insert(calendarId=calendar_id, body=event).execute()
                 if verbose:
-                    logging.info(f"Event created: {created_event.get('htmlLink')} - {event_summary}")
+                    logging.debug(f"Event created: {created_event.get('htmlLink')} - {event_summary}")
 
             time.sleep(1)
         if verbose:

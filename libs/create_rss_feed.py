@@ -16,7 +16,11 @@ class RssFeed:
 
     def get_rss_info(self, convert_format_google: bool=True) -> dict:
         dict_feed = {}
-
+        tzinfos = {
+                    'EDT': -4 * 3600,  # UTC-4
+                    'EST': -5 * 3600,  # UTC-5
+                    'KST': +9 * 3600   # UTC+9 (한국 시간대)
+                }
 
         for category, details in self.profile_dict.items():
             df_calendar = pd.DataFrame(columns=['title', 'published', 'link'])
@@ -26,14 +30,14 @@ class RssFeed:
                 if isinstance(urls, dict):  # Check if `urls` is a dictionary of feed URLs
                     for feed_name, url in urls.items():
 
-                        logging.info(f"Processing feed '{feed_name}' from source '{src}' at URL: {url}")
+                        logging.debug(f"Processing feed '{feed_name}' from source '{src}' at URL: {url}")
 
                         # Parse the RSS feed
                         feed = feedparser.parse(url)
                         for entry in feed.entries:
                             entry_title = entry.get("title", '')
                             link = entry.get("link", '')
-                            parsed_date = parser.parse(entry.get("published", pd.NaT)).strftime('%Y-%m-%d %H:%M:%S')
+                            parsed_date = parser.parse(entry.get("published", pd.NaT),tzinfos=tzinfos).strftime('%Y-%m-%d %H:%M:%S')
                             published_date = pd.to_datetime(parsed_date)
                             if src == 'rss':
                                 if RssFeed.skip(feed_name, entry_title):
@@ -43,7 +47,7 @@ class RssFeed:
                                 entry_title = html.unescape(entry_title)
                                 entry_title = re.sub(r'<[^>]*>', '', entry_title)
 
-                            logging.info(f"{category}, {entry_title}, {published_date}, {link}")
+                            logging.debug(f"{category}, {entry_title}, {published_date}, {link}")
                             df = pd.DataFrame([[entry_title, published_date, link]], columns=['title', 'published', 'link'])
                             
                             df_calendar = pd.concat([df_calendar, df], ignore_index=True)
@@ -96,7 +100,7 @@ class RssFeed:
         for index, row in df.iterrows():
             start_date = row['published'].strftime('%Y-%m-%d')
             subject = row['title']
-            description = f"More information: {row['link']}"
+            description = f"{row['link']}"
             end_date = start_date
             location = ''
             all_day_event = 'True'
