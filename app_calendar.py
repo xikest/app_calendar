@@ -10,14 +10,11 @@ app = FastAPI()
 @app.post("/run")
 def run_calendar():
     service = UPDATER.authenticate()
-    
+    dict_all_calendar = {}
     # token_path = 'token.pickle'
     # logging.info("Authenticating Google Calendar service...")
     # service = UPDATER.authenticate(token_path=token_path)
-    
-
-
-    dict_all_calendar = {}
+ 
 
     # 경제 캘린더 정보 가져오기
     try:
@@ -53,7 +50,6 @@ def run_calendar():
     for calendar_id, df_calendar in dict_all_calendar.items():
         try: 
             logging.info(f"Updating events for calendar ID: {calendar_id}...")
-            # CSV 파일 대신 df_calendar 데이터를 사용하는 경우 추가 처리 필요
             UPDATER.update_events(service, csv_file=df_calendar, calendar_id=calendar_id)
             logging.info(f"Events updated successfully for calendar ID: {calendar_id}.")
         except Exception as e:
