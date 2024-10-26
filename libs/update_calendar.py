@@ -9,7 +9,7 @@ from datetime import timedelta
 
 class UPDATER:
     @staticmethod
-    def authenticate(token_path: str = 'token.pickle'):
+    def authenticate(token_path: str = None):
         try:
             if token_path is None:
                 credentials, project = default(scopes=['https://www.googleapis.com/auth/calendar'])
