@@ -20,8 +20,7 @@ def run_calendar():
     try:
         logging.info("Fetching economic calendar information...")
         economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json")        
-        dict_calendar = economic_calendar.get_calendar_info()
-        dict_all_calendar.update(dict_calendar)
+        dict_all_calendar.update(economic_calendar.get_calendar_info())
         logging.info("Economic calendar information fetched successfully.")
     except Exception as e:
         logging.error(f"Error fetching economic calendar information: {e}")
@@ -30,8 +29,7 @@ def run_calendar():
     try:
         logging.info("Fetching news RSS information...")
         news_rss = RssFeed(json_path="json/rss_news.json")    
-        dict_calendar = news_rss.get_rss_info()
-        dict_all_calendar.update(dict_calendar)
+        dict_all_calendar.update(news_rss.get_rss_info())
         logging.info("News RSS information fetched successfully.")
     except Exception as e:
         logging.error(f"Error fetching news RSS information: {e}")
@@ -40,8 +38,7 @@ def run_calendar():
     try:
         logging.info("Fetching news web information...")
         news_web = NewsFeed(json_path="json/web_news.json")    
-        dict_calendar = news_web.get_news_info()
-        dict_all_calendar.update(dict_calendar)
+        dict_all_calendar.update(news_web.get_news_info())
         logging.info("News web information fetched successfully.")
     except Exception as e:
         logging.error(f"Error fetching news web information: {e}")
