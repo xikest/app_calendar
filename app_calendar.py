@@ -9,9 +9,6 @@ app = FastAPI()
 
 @app.post("/run")
 def run_calendar():
-    enable_headless = True
-    verbose = False        
-
     service = UPDATER.authenticate()
     
     # token_path = 'token.pickle'
@@ -25,7 +22,7 @@ def run_calendar():
     # 경제 캘린더 정보 가져오기
     try:
         logging.info("Fetching economic calendar information...")
-        economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json", enable_headless=enable_headless, verbose=verbose)        
+        economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json")        
         dict_calendar = economic_calendar.get_calendar_info()
         dict_all_calendar.update(dict_calendar)
         logging.info("Economic calendar information fetched successfully.")
@@ -35,7 +32,7 @@ def run_calendar():
     # 뉴스 RSS 정보 가져오기
     try:
         logging.info("Fetching news RSS information...")
-        news_rss = RssFeed(json_path="json/rss_news.json", verbose=verbose)    
+        news_rss = RssFeed(json_path="json/rss_news.json")    
         dict_calendar = news_rss.get_rss_info()
         dict_all_calendar.update(dict_calendar)
         logging.info("News RSS information fetched successfully.")
@@ -45,7 +42,7 @@ def run_calendar():
     # 웹 뉴스 정보 가져오기
     try:
         logging.info("Fetching news web information...")
-        news_web = NewsFeed(json_path="json/web_news.json", verbose=verbose)    
+        news_web = NewsFeed(json_path="json/web_news.json")    
         dict_calendar = news_web.get_news_info()
         dict_all_calendar.update(dict_calendar)
         logging.info("News web information fetched successfully.")
@@ -57,7 +54,7 @@ def run_calendar():
         try: 
             logging.info(f"Updating events for calendar ID: {calendar_id}...")
             # CSV 파일 대신 df_calendar 데이터를 사용하는 경우 추가 처리 필요
-            UPDATER.update_events(service, csv_file=df_calendar, calendar_id=calendar_id, verbose=verbose)
+            UPDATER.update_events(service, csv_file=df_calendar, calendar_id=calendar_id)
             logging.info(f"Events updated successfully for calendar ID: {calendar_id}.")
         except Exception as e:
             logging.error(f"Error updating events for calendar ID '{calendar_id}': {e}")

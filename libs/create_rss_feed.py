@@ -8,8 +8,8 @@ import logging
 
 
 class RssFeed:
-    def __init__(self, json_path: str, verbose=False):
-        self.verbose = verbose
+    def __init__(self, json_path: str, to_excel=False):
+        self.to_excel = to_excel
         
         with open(json_path, 'r', encoding='utf-8') as file:
             self.profile_dict = json.load(file)
@@ -60,7 +60,7 @@ class RssFeed:
                 dict_feed[calendar_id] = df_updated
             else:
                 dict_feed[calendar_id] = df_calendar
-            if self.verbose == True:
+            if self.to_excel == True:
                 try:
                     with pd.ExcelWriter("rss_calendar.xlsx", engine='openpyxl') as writer:
                         for calendar_id, df_calendar in dict_feed.items():

@@ -30,7 +30,7 @@ class UPDATER:
                 raise ValueError(f"Authentication failed: {e}")
 
     @staticmethod
-    def update_events(service, csv_file, calendar_id: str, verbose: bool = False):
+    def update_events(service, csv_file, calendar_id: str):
         if isinstance(csv_file, pd.DataFrame):
             df = csv_file
         elif isinstance(csv_file, str):
@@ -103,8 +103,7 @@ class UPDATER:
                         if existing_event['description'].strip() != event_description.strip():
                             event_id = existing_event['id']
                             service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
-                            if verbose:
-                                logging.debug(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (All Day Event)")
+                            logging.debug(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (All Day Event)")
                         create = False
                         break
 
@@ -121,17 +120,14 @@ class UPDATER:
                         if existing_event['description'].strip() != event_description.strip():
                             event_id = existing_event['id']
                             service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
-                            if verbose:
-                                logging.debug(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (Timed Event)")
+                            logging.debug(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (Timed Event)")
                         create = False
                         break
 
             if create:
                 created_event = service.events().insert(calendarId=calendar_id, body=event).execute()
-                if verbose:
-                    logging.debug(f"Event created: {created_event.get('htmlLink')} - {event_summary}")
+                logging.debug(f"Event created: {created_event.get('htmlLink')} - {event_summary}")
 
             time.sleep(1)
-        if verbose:
-            logging.info("Finished updating events.")
+        logging.info("Finished updating events.")
         return None
