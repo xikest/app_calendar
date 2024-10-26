@@ -1,3 +1,4 @@
+from google.auth import default
 from googleapiclient.discovery import build
 import pandas as pd
 import os
@@ -27,8 +28,6 @@ class UPDATER:
         except Exception as e:
                 logging.error(f"Authentication failed: {e}")
                 return None
-
-
 
     @staticmethod
     def update_events(service, csv_file, calendar_id: str, verbose: bool = False):

@@ -1,13 +1,10 @@
-from google.auth import default
-from googleapiclient.discovery import build
 from libs import UPDATER, ECONOMIC_CALENDAR, RssFeed, NewsFeed
 import logging
 from fastapi import FastAPI
 
+
 logging.basicConfig(level=logging.DEBUG)  # DEBUG로 설정하면 모든 로그 메시지가 출력됨
 app = FastAPI()
-
-# Google Calendar API 인증
 
 
 @app.post("/run")
