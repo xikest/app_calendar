@@ -50,7 +50,9 @@ class RssFeed:
                             logging.debug(f"{category}, {entry_title}, {published_date}, {link}")
                             df = pd.DataFrame([[entry_title, published_date, link]], columns=['title', 'published', 'link'])
                             
-                            df_calendar = pd.concat([df_calendar, df], ignore_index=True)
+                            df = df.dropna(axis=0, how='all')
+                            if not df.empty:
+                                df_calendar = pd.concat([df_calendar, df], ignore_index=True)
             
             if convert_format_google:
                 df_calendar = RssFeed.convert_to_google_calendar_format(df_calendar)
@@ -115,9 +117,6 @@ class RssFeed:
                 'Location': location,
                 'All Day Event': all_day_event,
             }])
-            new_event = new_event.dropna(axis=0, how='all')
-            if not new_event.empty:
-                calendar_df = pd.concat([calendar_df, new_event], ignore_index=True)
-            # calendar_df = pd.concat([calendar_df, new_event], ignore_index=True)
+            calendar_df = pd.concat([calendar_df, new_event], ignore_index=True)
 
         return calendar_df
