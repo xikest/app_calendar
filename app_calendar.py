@@ -12,16 +12,13 @@ def run_calendar():
     enable_headless = True
     verbose = False        
 
-    logging.info("Authenticating Google Calendar service...")
     service = UPDATER.authenticate()
     
     # token_path = 'token.pickle'
     # logging.info("Authenticating Google Calendar service...")
     # service = UPDATER.authenticate(token_path=token_path)
     
-    if service is None:
-        logging.error("Failed to authenticate Google Calendar service. Exiting...")
-        return
+
 
     dict_all_calendar = {}
 

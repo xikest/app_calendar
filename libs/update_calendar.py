@@ -11,6 +11,7 @@ from datetime import timedelta
 class UPDATER:
     @staticmethod
     def authenticate(token_path: str = None):
+        logging.info("Authenticating Google Calendar service...")
         try:
             if token_path is None:
                 credentials, project = default(scopes=['https://www.googleapis.com/auth/calendar'])
@@ -26,8 +27,7 @@ class UPDATER:
             logging.info("Successfully authenticated Google Calendar service.")
             return service
         except Exception as e:
-                logging.error(f"Authentication failed: {e}")
-                return None
+                raise ValueError(f"Authentication failed: {e}")
 
     @staticmethod
     def update_events(service, csv_file, calendar_id: str, verbose: bool = False):
