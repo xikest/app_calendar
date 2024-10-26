@@ -115,7 +115,9 @@ class RssFeed:
                 'Location': location,
                 'All Day Event': all_day_event,
             }])
-
-            calendar_df = pd.concat([calendar_df, new_event], ignore_index=True)
+            new_event = new_event.dropna(axis=0, how='all')
+            if not new_event.empty:
+                calendar_df = pd.concat([calendar_df, new_event], ignore_index=True)
+            # calendar_df = pd.concat([calendar_df, new_event], ignore_index=True)
 
         return calendar_df
