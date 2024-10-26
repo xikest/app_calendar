@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)  # DEBUG로 설정하면 모든 로그 �
 app = FastAPI()
 
 
-@app.post("/run")
+@app.post("/run_calendar")
 def run_calendar():
     service = UPDATER.authenticate()
     dict_all_calendar = {}
