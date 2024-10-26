@@ -78,12 +78,12 @@ class RssFeed:
         feed_name = feed_name.lower()
         title = title.lower()
         
-        if feed_name == "sony":
+        if feed_name == "ir":
             skip_words = ["notice", "stock"]
             if any(word in title for word in skip_words):
                 return True
         
-        if feed_name in ["sony support", "sony official"]:
+        if "sony" in feed_name:
             if "bravia" not in title:
                 return True
         
