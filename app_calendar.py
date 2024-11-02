@@ -11,8 +11,12 @@ app = FastAPI()
 
 @app.get("/run_calendar")
 def run_calendar():
-    secret_path = "web-driver.json"
-    service = UPDATER.authenticate(json_path=secret_path)
+    
+    
+    token_path = 'token.pickle'
+    service = UPDATER.authenticate(token_path=token_path)
+    # secret_path = "web-driver.json"
+    # service = UPDATER.authenticate(json_path=secret_path)
     dict_all_calendar = {}
 
     # # 경제 캘린더 정보 가져오기

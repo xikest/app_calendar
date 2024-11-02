@@ -6,23 +6,43 @@ from datetime import datetime
 import time
 import logging
 from datetime import timedelta
-
+import pickle
 
 
 
 class UPDATER:
+    # @staticmethod
+    # def authenticate(json_path: str):
+    #     logging.info("Authenticating Google Calendar service...")
+    #     try:
+    #         # JSON 파일을 통해 자격 증명 생성
+    #         credentials = service_account.Credentials.from_service_account_file(json_path)
+    #         service = build('calendar', 'v3', credentials=credentials)
+    #         logging.info("Successfully authenticated Google Calendar service.")
+    #         return service
+    #     except Exception as e:
+    #         logging.error(f"Authentication failed: {e}")
+    #         raise ValueError(f"Authentication failed: {e}")
+
     @staticmethod
-    def authenticate(json_path: str):
-        logging.info("Authenticating Google Calendar service...")
+    def authenticate(token_path: str = 'token.pickle'):
         try:
-            # JSON 파일을 통해 자격 증명 생성
-            credentials = service_account.Credentials.from_service_account_file(json_path)
+            if token_path is None:
+                credentials, project = default(scopes=['https://www.googleapis.com/auth/calendar'])
+                service = build('calendar', 'v3', credentials=credentials)
+            else:
+                if os.path.exists(token_path):
+                    with open(token_path, 'rb') as token:
+                        credentials = pickle.load(token)
+                else:
+                    logging.error(f"Token file '{token_path}' not found.")
+                    return None
             service = build('calendar', 'v3', credentials=credentials)
             logging.info("Successfully authenticated Google Calendar service.")
             return service
         except Exception as e:
-            logging.error(f"Authentication failed: {e}")
-            raise ValueError(f"Authentication failed: {e}")
+                logging.error(f"Authentication failed: {e}")
+                return None
 
     @staticmethod
     def update_events(service, csv_file, calendar_id: str):
