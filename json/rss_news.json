@@ -1,6 +1,6 @@
 {
     "news": {
-        "calendar_id": "88fdc1d24cd7e71a66be4c5ff6b803031aa19d2c95f5308647384922cb45ca19@group.calendar.google.com",
+        "calendar_id": "0a58fa6f7bc6f0acb499c949b90d8c6c545b478063e06ebe6035675f8c8662b8@group.calendar.google.com",
         "contents": {
             "google": {
                 "김리안의 에네르기파WAR": "https://www.google.co.kr/alerts/feeds/11305193269230284098/10051269404088993743",
@@ -10,7 +10,7 @@
         }
     },
     "bok": {
-        "calendar_id": "52cc1caa0332f5a77329fd2ec97243955dac3de7d8c9cec8c3406a49a10305b6@group.calendar.google.com",
+        "calendar_id": "049b54db23d5570f93c89d1a057f2a76e5642350d62c4e6b69044338738f05f6@group.calendar.google.com",
         "contents": {
             "rss": {
                 "뉴욕사무소": "https://www.bok.or.kr/portal/bbs/P0002221/news.rss?menuNo=200081",
@@ -25,7 +25,7 @@
         }
     },
     "EIA": {
-        "calendar_id": "0dea79212e65062f43c2cf6f8801249fbc36a9f3eebb27eee462f947e4cd1689@group.calendar.google.com",
+        "calendar_id": "39ed617602797d6f5d925d40ecd380df75ac38d7963cc9f1dd4560a93916d2c9@group.calendar.google.com",
         "contents": {
             "rss": {
                 "EIA": "https://www.eia.gov/rss/todayinenergy.xml"

@@ -11,38 +11,18 @@ import pickle
 
 
 class UPDATER:
-    # @staticmethod
-    # def authenticate(json_path: str):
-    #     logging.info("Authenticating Google Calendar service...")
-    #     try:
-    #         # JSON 파일을 통해 자격 증명 생성
-    #         credentials = service_account.Credentials.from_service_account_file(json_path)
-    #         service = build('calendar', 'v3', credentials=credentials)
-    #         logging.info("Successfully authenticated Google Calendar service.")
-    #         return service
-    #     except Exception as e:
-    #         logging.error(f"Authentication failed: {e}")
-    #         raise ValueError(f"Authentication failed: {e}")
-
     @staticmethod
-    def authenticate(token_path: str = 'token.pickle'):
+    def authenticate(json_path: str):
+        logging.info("Authenticating Google Calendar service...")
         try:
-            if token_path is None:
-                credentials, project = default(scopes=['https://www.googleapis.com/auth/calendar'])
-                service = build('calendar', 'v3', credentials=credentials)
-            else:
-                if os.path.exists(token_path):
-                    with open(token_path, 'rb') as token:
-                        credentials = pickle.load(token)
-                else:
-                    logging.error(f"Token file '{token_path}' not found.")
-                    return None
+            # JSON 파일을 통해 자격 증명 생성
+            credentials = service_account.Credentials.from_service_account_file(json_path)
             service = build('calendar', 'v3', credentials=credentials)
             logging.info("Successfully authenticated Google Calendar service.")
             return service
         except Exception as e:
-                logging.error(f"Authentication failed: {e}")
-                return None
+            logging.error(f"Authentication failed: {e}")
+            raise ValueError(f"Authentication failed: {e}")
 
     @staticmethod
     def update_events(service, csv_file, calendar_id: str):
@@ -103,19 +83,16 @@ class UPDATER:
 
             create = True
             for existing_event in existing_events.get('items', []):
-                logging.info(f"{existing_event}")
                 existing_is_all_day = 'date' in existing_event['start']
                 existing_start = existing_event['start'].get('date') or existing_event['start'].get('dateTime')
                 existing_end = existing_event['end'].get('date') or existing_event['end'].get('dateTime')
-
+                
                 if is_all_day and existing_is_all_day:
                     existing_start_date = datetime.strptime(existing_start, '%Y-%m-%d').date()
-                    existing_end_date = datetime.strptime(existing_end, '%Y-%m-%d').date()
-
+                    new_start_datetime = datetime.strptime(event_start_date, '%Y-%m-%d').date()
+                    
                     if (existing_event['summary'].strip() == event_summary.strip() and
-                        existing_start_date == datetime.strptime(event_start_date, '%Y-%m-%d').date() and
-                        existing_end_date == datetime.strptime(event_end_date, '%Y-%m-%d').date()):
-                        
+                        existing_start_date == new_start_datetime):
                         if existing_event['description'].strip() != event_description.strip():
                             event_id = existing_event['id']
                             service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
@@ -139,7 +116,6 @@ class UPDATER:
                             logging.info(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (Timed Event)")
                         create = False
                         break
-
             if create:
                 created_event = service.events().insert(calendarId=calendar_id, body=event).execute()
                 logging.info(f"Event created: {created_event.get('htmlLink')} - {event_summary}")

@@ -4,19 +4,15 @@ from fastapi import FastAPI
 import os
 import uvicorn 
 
-
 logging.basicConfig(level=logging.ERROR)  # DEBUG로 설정하면 모든 로그 메시지가 출력됨
 app = FastAPI()
 
 
 @app.get("/run_calendar")
 def run_calendar():
-    
-    
-    token_path = 'token.pickle'
-    service = UPDATER.authenticate(token_path=token_path)
-    # secret_path = "web-driver.json"
-    # service = UPDATER.authenticate(json_path=secret_path)
+
+    secret_path = "web-driver.json"
+    service = UPDATER.authenticate(json_path=secret_path)
     dict_all_calendar = {}
 
     # # 경제 캘린더 정보 가져오기
