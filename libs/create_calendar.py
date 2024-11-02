@@ -26,8 +26,8 @@ class ECONOMIC_CALENDAR(Scraper):
 
         try:
             self._initialize_driver(driver)
-            self._select_all_countries(driver)
-            self._click_this_month(driver)
+            # self._select_all_countries(driver)
+            # self._click_this_month(driver)
             headers = self._extract_headers(driver)
             loop_cnt = 1
             while operating:
@@ -42,11 +42,10 @@ class ECONOMIC_CALENDAR(Scraper):
                         continue
                 logging.debug("Extracted IDs: %s", id_list)
                 rows.extend(self._extract_table_data(driver))   #처음페이지
-                driver.save_screenshot(f"page{loop_cnt}.png") 
                 for id in id_list:
                     for try_cnt in range(5):
                         try: 
-                            logging.debug(f"Clicking on page: {id}")
+                            logging.info(f"Clicking on page: {id}")
                             nextpage = driver.find_element(By.XPATH, f'//*[@id="{id}"]')
                             nextpage.click()
                             time.sleep(10) # wating page loading

@@ -10,7 +10,7 @@
         }
     },
     "bok": {
-        "calendar_id": "9c2e56f2caab77ba5721665b68643ffaa01ddf39a43b606ec6c738c3221531e4@group.calendar.google.com",
+        "calendar_id": "52cc1caa0332f5a77329fd2ec97243955dac3de7d8c9cec8c3406a49a10305b6@group.calendar.google.com",
         "contents": {
             "rss": {
                 "뉴욕사무소": "https://www.bok.or.kr/portal/bbs/P0002221/news.rss?menuNo=200081",
@@ -25,7 +25,7 @@
         }
     },
     "EIA": {
-        "calendar_id": "5ed68007806f28498be7634d0c6a5c5e97c52137503e95bfc289968b65f5f312@group.calendar.google.com",
+        "calendar_id": "0dea79212e65062f43c2cf6f8801249fbc36a9f3eebb27eee462f947e4cd1689@group.calendar.google.com",
         "contents": {
             "rss": {
                 "EIA": "https://www.eia.gov/rss/todayinenergy.xml"

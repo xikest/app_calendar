@@ -1,33 +1,28 @@
-from google.auth import default
 from googleapiclient.discovery import build
+from google.oauth2 import service_account
 import pandas as pd
 import os
-import pickle
 from datetime import datetime
 import time
 import logging
 from datetime import timedelta
 
+
+
+
 class UPDATER:
     @staticmethod
-    def authenticate(token_path: str = None):
+    def authenticate(json_path: str):
         logging.info("Authenticating Google Calendar service...")
         try:
-            if token_path is None:
-                credentials, project = default(scopes=['https://www.googleapis.com/auth/calendar'])
-                service = build('calendar', 'v3', credentials=credentials)
-            else:
-                if os.path.exists(token_path):
-                    with open(token_path, 'rb') as token:
-                        credentials = pickle.load(token)
-                else:
-                    logging.error(f"Token file '{token_path}' not found.")
-                    return None
+            # JSON 파일을 통해 자격 증명 생성
+            credentials = service_account.Credentials.from_service_account_file(json_path)
             service = build('calendar', 'v3', credentials=credentials)
             logging.info("Successfully authenticated Google Calendar service.")
             return service
         except Exception as e:
-                raise ValueError(f"Authentication failed: {e}")
+            logging.error(f"Authentication failed: {e}")
+            raise ValueError(f"Authentication failed: {e}")
 
     @staticmethod
     def update_events(service, csv_file, calendar_id: str):
@@ -88,6 +83,7 @@ class UPDATER:
 
             create = True
             for existing_event in existing_events.get('items', []):
+                logging.info(f"{existing_event}")
                 existing_is_all_day = 'date' in existing_event['start']
                 existing_start = existing_event['start'].get('date') or existing_event['start'].get('dateTime')
                 existing_end = existing_event['end'].get('date') or existing_event['end'].get('dateTime')
@@ -103,7 +99,7 @@ class UPDATER:
                         if existing_event['description'].strip() != event_description.strip():
                             event_id = existing_event['id']
                             service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
-                            logging.debug(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (All Day Event)")
+                            logging.info(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (All Day Event)")
                         create = False
                         break
 
@@ -120,13 +116,13 @@ class UPDATER:
                         if existing_event['description'].strip() != event_description.strip():
                             event_id = existing_event['id']
                             service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
-                            logging.debug(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (Timed Event)")
+                            logging.info(f"Event updated: {existing_event.get('htmlLink')} - {event_summary} (Timed Event)")
                         create = False
                         break
 
             if create:
                 created_event = service.events().insert(calendarId=calendar_id, body=event).execute()
-                logging.debug(f"Event created: {created_event.get('htmlLink')} - {event_summary}")
+                logging.info(f"Event created: {created_event.get('htmlLink')} - {event_summary}")
 
             time.sleep(1)
         logging.info("Finished updating events.")

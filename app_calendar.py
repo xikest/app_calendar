@@ -1,29 +1,28 @@
 from libs import UPDATER, ECONOMIC_CALENDAR, RssFeed, NewsFeed
 import logging
 from fastapi import FastAPI
+import os
+import uvicorn 
 
 
-logging.basicConfig(level=logging.INFO)  # DEBUG로 설정하면 모든 로그 메시지가 출력됨
+logging.basicConfig(level=logging.ERROR)  # DEBUG로 설정하면 모든 로그 메시지가 출력됨
 app = FastAPI()
 
 
-@app.post("/run_calendar")
+@app.get("/run_calendar")
 def run_calendar():
-    service = UPDATER.authenticate()
+    secret_path = "web-driver.json"
+    service = UPDATER.authenticate(json_path=secret_path)
     dict_all_calendar = {}
-    # token_path = 'token.pickle'
-    # logging.info("Authenticating Google Calendar service...")
-    # service = UPDATER.authenticate(token_path=token_path)
- 
 
-    # 경제 캘린더 정보 가져오기
-    try:
-        logging.info("Fetching economic calendar information...")
-        economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json")        
-        dict_all_calendar.update(economic_calendar.get_calendar_info())
-        logging.info("Economic calendar information fetched successfully.")
-    except Exception as e:
-        logging.error(f"Error fetching economic calendar information: {e}")
+    # # 경제 캘린더 정보 가져오기
+    # try:
+    #     logging.info("Fetching economic calendar information...")
+    #     economic_calendar = ECONOMIC_CALENDAR(json_path="json/calendar.json")        
+    #     dict_all_calendar.update(economic_calendar.get_calendar_info())
+    #     logging.info("Economic calendar information fetched successfully.")
+    # except Exception as e:
+    #     logging.error(f"Error fetching economic calendar information: {e}")
     
     # 뉴스 RSS 정보 가져오기
     try:
@@ -53,4 +52,9 @@ def run_calendar():
             logging.error(f"Error updating events for calendar ID '{calendar_id}': {e}")
         
     logging.info("All tasks completed.")
+
+
+# if __name__ == "__main__":
+#     uvicorn.run("app_calendar:app", host="0.0.0.0", port=8800)
+    
 

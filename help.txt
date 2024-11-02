@@ -47,6 +47,11 @@ pip freeze > requirements.txt
 python3  app_calendar.py 
 
 
+##docker
+docker-compose up
+
+#docker secret create calendar_secret /path/to/web-scraper.json.json
+
 
 # 우분투 패키지 설치
 sudo apt-get update
