@@ -66,6 +66,26 @@
                 "wired.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/16412324331342078503",
                 "flatpanelshd":"https://www.google.co.kr/alerts/feeds/11305193269230284098/2922377286333081695"
             }
-        }
+        },
+        "LG": {
+            "calendar_id": "68de1da2accc883f6890e5691e6a5118793f5d5493c079237ad2053534898c9e@group.calendar.google.com",
+            "contents": {
+                "google": {
+                    "techradar.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/365847556970863967",
+                    "whathifi.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/1358842454354987799",
+                    "tomsguide.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/12205455836771601400",
+                    "rtings.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/13604180893739641667",
+                    "digitaltrends.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/16310098009259071806",
+                    "reuters.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/16251984682267283168",      
+                    "counterpointresearch_kr":"https://www.google.co.kr/alerts/feeds/11305193269230284098/5316346144111178034",
+                    "avsforums.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/16608675770130188863",
+                    "theshortcut.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/11165498303177124670",
+                    "ign.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/15654731184306348870",
+                    "wired.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/2618555138095868086",
+                    "flatpanelshd":"https://www.google.co.kr/alerts/feeds/11305193269230284098/16310098009259073187"
+                }
+            }
+
+
     }
 }
