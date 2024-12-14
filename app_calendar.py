@@ -4,7 +4,7 @@ from fastapi import FastAPI
 import os
 import uvicorn 
 
-logging.basicConfig(level=logging.ERROR)  # DEBUG로 설정하면 모든 로그 메시지가 출력됨
+logging.basicConfig(level=logging.INFO)  # DEBUG로 설정하면 모든 로그 메시지가 출력됨
 app = FastAPI()
 
 
@@ -36,14 +36,14 @@ def run_calendar():
         logging.error(f"Error fetching news RSS information: {e}")
     
     # 웹 뉴스 정보 가져오기
-    # try:
-    #     logging.info("Fetching news web information...")
-    #     json_path = "https://raw.githubusercontent.com/xikest/app_calendar/main/json/web_news.json"
-    #     news_web = NewsFeed(json_path="json/web_news.json")    
-    #     dict_all_calendar.update(news_web.get_news_info())
-    #     logging.info("News web information fetched successfully.")
-    # except Exception as e:
-    #     logging.error(f"Error fetching news web information: {e}")
+    try:
+        logging.info("Fetching news web information...")
+        json_path = "https://raw.githubusercontent.com/xikest/app_calendar/main/json/web_news.json"
+        news_web = NewsFeed(json_path="json/web_news.json")    
+        dict_all_calendar.update(news_web.get_news_info())
+        logging.info("News web information fetched successfully.")
+    except Exception as e:
+        logging.error(f"Error fetching news web information: {e}")
 
     # 모든 캘린더에 이벤트 업데이트
     for calendar_id, df_calendar in dict_all_calendar.items():
