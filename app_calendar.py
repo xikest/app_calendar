@@ -27,7 +27,9 @@ def run_calendar():
     # 뉴스 RSS 정보 가져오기
     try:
         logging.info("Fetching news RSS information...")
-        news_rss = RssFeed(json_path="json/rss_news.json")    
+        json_path = "https://raw.githubusercontent.com/xikest/app_calendar/main/json/rss_news.json"
+        skip_json_path = "https://raw.githubusercontent.com/xikest/app_calendar/main/json/filter_words.json"
+        news_rss = RssFeed(json_path=json_path, skip_json_path=skip_json_path)    
         dict_all_calendar.update(news_rss.get_rss_info())
         logging.info("News RSS information fetched successfully.")
     except Exception as e:
@@ -36,6 +38,7 @@ def run_calendar():
     # 웹 뉴스 정보 가져오기
     try:
         logging.info("Fetching news web information...")
+        json_path = "https://raw.githubusercontent.com/xikest/app_calendar/main/json/web_news.json"
         news_web = NewsFeed(json_path="json/web_news.json")    
         dict_all_calendar.update(news_web.get_news_info())
         logging.info("News web information fetched successfully.")
@@ -54,7 +57,7 @@ def run_calendar():
     logging.info("All tasks completed.")
 
 
-# if __name__ == "__main__":
-#     uvicorn.run("app_calendar:app", host="0.0.0.0", port=8800)
+if __name__ == "__main__":
+    uvicorn.run("app_calendar:app", host="0.0.0.0", port=8800)
     
 

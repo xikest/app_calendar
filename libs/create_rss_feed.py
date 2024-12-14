@@ -1,18 +1,35 @@
 import pandas as pd
 import feedparser
 import json
+import requests
 import html
 import re
 from dateutil import parser
 import logging
 
 
+
 class RssFeed:
-    def __init__(self, json_path: str, to_excel=False):
+    def __init__(self, json_path: str, skip_json_path:str=None, to_excel=False):
         self.to_excel = to_excel
+        self.profile_dict = self._load_json(json_path)
         
-        with open(json_path, 'r', encoding='utf-8') as file:
-            self.profile_dict = json.load(file)
+        if skip_json_path:
+            self.skip_dict = self._load_json(skip_json_path)
+        else:
+            self.skip_dict = {}
+
+    def _load_json(self, path: str):
+        try:
+            with open(path, 'r', encoding='utf-8') as file:
+                return json.load(file)
+        except:
+            try:
+                response = requests.get(path)
+                return response.json()
+            except:
+                raise ValueError(f"Failed to load JSON from {path}")
+
 
     def get_rss_info(self, convert_format_google: bool=True) -> dict:
         dict_feed = {}
@@ -40,7 +57,7 @@ class RssFeed:
                             parsed_date = parser.parse(entry.get("published", pd.NaT),tzinfos=tzinfos).strftime('%Y-%m-%d %H:%M:%S')
                             published_date = pd.to_datetime(parsed_date)
                             if src == 'rss':
-                                if RssFeed.skip(feed_name, entry_title):
+                                if RssFeed.skip(category, feed_name, entry_title, self.skip_dict):
                                     continue
                             elif src == 'google':
                                 link = link.replace('https://www.google.com/url?rct=j&sa=t&url=', '').split('&ct=ga&cd')[0]
@@ -74,20 +91,27 @@ class RssFeed:
         return dict_feed
 
     @staticmethod
-    def skip(feed_name, title):
+    def skip(category, feed_name, title, filter_dict:dict=None):
         feed_name = feed_name.lower()
+        category = category.lower()
         title = title.lower()
-        
-        if feed_name == "sony":
-            skip_words = ["notice", "stock"]
-            if any(word in title for word in skip_words):
-                return True
-        
-        if "filtered" in feed_name:
-            if "bravia" not in title:
-                return True
-        
-        return False
+        filter_dict = filter_dict.get(category)
+
+        if filter_dict is not None:
+           
+            # `skip` 조건 확인
+            if 'skiped' in feed_name:
+                skip_words: list = filter_dict.get("skip")
+                if skip_words is not None and any(word in title for word in skip_words):
+                    return True  #
+            
+            # `filter` 조건 확인
+            if "filtered" in feed_name:
+                filter_words: list = filter_dict.get("filter")
+                if filter_words is not None and not any(word in title for word in filter_words):
+                    return True  
+        else:
+            return False
 
     @staticmethod
     def re_trim(text: str):

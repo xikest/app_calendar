@@ -3,12 +3,25 @@ import json
 from bs4 import BeautifulSoup
 from urllib.request import urlopen, Request
 from datetime import datetime
+import requests
 import logging
 
 class NewsFeed:
     def __init__(self, json_path: str = 'news.json'):
-        with open(json_path, 'r', encoding='utf-8') as file:
-            self.news_dict = json.load(file)
+        self.news_dict = self._load_json(json_path)
+
+    def _load_json(self, path: str):
+        try:
+            with open(path, 'r', encoding='utf-8') as file:
+                return json.load(file)
+        except:
+            try:
+                response = requests.get(path)
+                return response.json()
+            except:
+                raise ValueError(f"Failed to load JSON from {path}")
+
+
 
     def get_news_info(self, convert_format_google=True) -> dict:
         dict_news = {}

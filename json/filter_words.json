@@ -1,0 +1,4 @@
+{
+    "sony": {"skip":["notice", "stock"],
+    "filter":["bravia"]}
+}
