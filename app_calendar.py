@@ -4,7 +4,7 @@ from fastapi import FastAPI
 import os
 import uvicorn 
 
-logging.basicConfig(level=logging.ERROR)  # DEBUG로 설정하면 모든 로그 메시지가 출력됨
+logging.basicConfig(level=logging.INFO)  # DEBUG로 설정하면 모든 로그 메시지가 출력됨
 app = FastAPI()
 
 
@@ -57,7 +57,7 @@ def run_calendar():
     logging.info("All tasks completed.")
 
 
-# if __name__ == "__main__":
-#     uvicorn.run("app_calendar:app", host="0.0.0.0", port=8800)
+if __name__ == "__main__":
+    uvicorn.run("app_calendar:app", host="0.0.0.0", port=8800)
     
 

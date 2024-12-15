@@ -1,37 +1,4 @@
 {
-    "news": {
-        "calendar_id": "0a58fa6f7bc6f0acb499c949b90d8c6c545b478063e06ebe6035675f8c8662b8@group.calendar.google.com",
-        "contents": {
-            "google": {
-                "김리안의 에네르기파WAR": "https://www.google.co.kr/alerts/feeds/11305193269230284098/10051269404088993743",
-                "오늘의 유가": "https://www.google.co.kr/alerts/feeds/11305193269230284098/8817692926258482559",
-                "원자재 이슈탐구": "https://www.google.co.kr/alerts/feeds/11305193269230284098/9036013775263201261"
-            }
-        }
-    },
-    "bok": {
-        "calendar_id": "049b54db23d5570f93c89d1a057f2a76e5642350d62c4e6b69044338738f05f6@group.calendar.google.com",
-        "contents": {
-            "rss": {
-                "뉴욕사무소": "https://www.bok.or.kr/portal/bbs/P0002221/news.rss?menuNo=200081",
-                "워싱턴주재원": "https://www.bok.or.kr/portal/bbs/P0002223/news.rss?menuNo=200082",
-                "프랑크푸르트사무소": "https://www.bok.or.kr/portal/bbs/P0002226/news.rss?menuNo=200083",
-                "동경사무소": "https://www.bok.or.kr/portal/bbs/P0002229/news.rss?menuNo=200084",
-                "런던사무소": "https://www.bok.or.kr/portal/bbs/P0002231/news.rss?menuNo=200085",
-                "북경사무소": "https://www.bok.or.kr/portal/bbs/P0002232/news.rss?menuNo=200086",
-                "홍콩주재원": "https://www.bok.or.kr/portal/bbs/P0002233/news.rss?menuNo=200087",
-                "상해주재원": "https://www.bok.or.kr/portal/bbs/P0002234/news.rss?menuNo=200088"
-            }
-        }
-    },
-    "eia": {
-        "calendar_id": "39ed617602797d6f5d925d40ecd380df75ac38d7963cc9f1dd4560a93916d2c9@group.calendar.google.com",
-        "contents": {
-            "rss": {
-                "EIA": "https://www.eia.gov/rss/todayinenergy.xml"
-            }
-        }
-    },
     "sony": {
         "calendar_id": "0c227a75e976c06994e8cc15eef5de98e25fe384b65d057b9edbbb37a7ed7efc@group.calendar.google.com",
         "contents": {
