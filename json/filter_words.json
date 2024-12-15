@@ -1,8 +1,8 @@
 {
-    "sony": {"skip":["notice", "stock"],
+    "sony": {"skip":["notice", "stock", "deal"],
     "filter":["bravia"]},
 
-    "lg": {"skip":["notice", "stock"],
+    "lg": {"skip":["notice", "stock", "deal"],
     "filter":["lg"]}
 
 
