@@ -70,6 +70,13 @@
         "LG": {
             "calendar_id": "cbedbc7a7f5485a813453295dff73407cbad79543f69571ad69c1aa9a93204d7@group.calendar.google.com",
             "contents": {
+                "rss": {
+                    "Digital Trends filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UC8wXC0ZCfGt3HaVLy_fdTQw",
+                    "RTINGS Home Theater filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCAi6GKtTPoYxUheIbVhnwqw",
+                    "Abt Electronics filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UClFPdTOI8x3pR8qwcpAa_vA",
+                    "Tech Steve filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCmHO0Rw7nBFK2233om_vyWA",
+                    "Stop the FOMO filtered": "https://www.youtube.com/feeds/videos.xml?channel_id=UCqHuvvETx7PKapuchT2BnSA"
+                },
                 "google": {
                     "techradar.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/365847556970863967",
                     "whathifi.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/1358842454354987799",
