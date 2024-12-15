@@ -100,7 +100,7 @@ class RssFeed:
         if filter_dict is not None:
            
             # `skip` 조건 확인
-            if 'skiped' in feed_name:
+            if "filtered" in feed_name:
                 skip_words: list = filter_dict.get("skip")
                 if skip_words is not None and any(word.lower() in title for word in skip_words):
                     return True  #
