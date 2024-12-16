@@ -9,18 +9,23 @@
             }
         }
     },
-    "bok": {
+    "macro": {
         "calendar_id": "049b54db23d5570f93c89d1a057f2a76e5642350d62c4e6b69044338738f05f6@group.calendar.google.com",
         "contents": {
             "rss": {
-                "뉴욕사무소": "https://www.bok.or.kr/portal/bbs/P0002221/news.rss?menuNo=200081",
-                "워싱턴주재원": "https://www.bok.or.kr/portal/bbs/P0002223/news.rss?menuNo=200082",
-                "프랑크푸르트사무소": "https://www.bok.or.kr/portal/bbs/P0002226/news.rss?menuNo=200083",
-                "동경사무소": "https://www.bok.or.kr/portal/bbs/P0002229/news.rss?menuNo=200084",
-                "런던사무소": "https://www.bok.or.kr/portal/bbs/P0002231/news.rss?menuNo=200085",
-                "북경사무소": "https://www.bok.or.kr/portal/bbs/P0002232/news.rss?menuNo=200086",
-                "홍콩주재원": "https://www.bok.or.kr/portal/bbs/P0002233/news.rss?menuNo=200087",
-                "상해주재원": "https://www.bok.or.kr/portal/bbs/P0002234/news.rss?menuNo=200088"
+                "bok_뉴욕사무소": "https://www.bok.or.kr/portal/bbs/P0002221/news.rss?menuNo=200081",
+                "bok_워싱턴주재원": "https://www.bok.or.kr/portal/bbs/P0002223/news.rss?menuNo=200082",
+                "bok_프랑크푸르트사무소": "https://www.bok.or.kr/portal/bbs/P0002226/news.rss?menuNo=200083",
+                "bok_동경사무소": "https://www.bok.or.kr/portal/bbs/P0002229/news.rss?menuNo=200084",
+                "bok_런던사무소": "https://www.bok.or.kr/portal/bbs/P0002231/news.rss?menuNo=200085",
+                "bok_북경사무소": "https://www.bok.or.kr/portal/bbs/P0002232/news.rss?menuNo=200086",
+                "bok_홍콩주재원": "https://www.bok.or.kr/portal/bbs/P0002233/news.rss?menuNo=200087",
+                "bok_상해주재원": "https://www.bok.or.kr/portal/bbs/P0002234/news.rss?menuNo=200088",
+                "bls_jolt":"https://bls.gov/feed/jolts.rss",
+                "bls_eci":"https://www.bls.gov/feed/eci.rss",
+                "bls_cpi":"https://www.bls.gov/feed/cpi.rss",
+                "bls_ppi":"https://www.bls.gov/feed/ppi_latest.rss",
+                "fed_fomc":"https://www.federalreserve.gov/feeds/press_monetary.xml"
             }
         }
     },
@@ -94,6 +99,30 @@
         }
     },
 
+    "panasonic": {
+        "calendar_id": "5b28f05cbebdf8426beedc6e2fa267767529d17b91c561fccad83d7d6a5ab0f7@group.calendar.google.com",
+        "contents": {
+            "rss": {
+                "Digital Trends skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UC8wXC0ZCfGt3HaVLy_fdTQw",
+                "RTINGS Home Theater skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCAi6GKtTPoYxUheIbVhnwqw",
+                "Abt Electronics skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UClFPdTOI8x3pR8qwcpAa_vA",
+                "Tech Steve skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCmHO0Rw7nBFK2233om_vyWA",
+                "Stop the FOMO skipped filtered": "https://www.youtube.com/feeds/videos.xml?channel_id=UCqHuvvETx7PKapuchT2BnSA"
+            },
+            "google": {
+                "techradar.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/11976618574774654974",
+                "whathifi.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/9557981570632939976",
+                "tomsguide.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/15632018454823161134",
+                "rtings.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/448066278514243124",
+                "digitaltrends.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/15517615931508386150",
+                "bloomburg":"https://www.google.co.kr/alerts/feeds/11305193269230284098/15161704199788397157",
+                "reuters.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/12751475815483095796",      
+                "avsforums.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/15517615931508384290",
+                "wired.com":"https://www.google.co.kr/alerts/feeds/11305193269230284098/17910232460729699535",
+                "flatpanelshd":"https://www.google.co.kr/alerts/feeds/11305193269230284098/7308536476785456836"
+            }
+        }
+    },
     "shipments": {
         "calendar_id": "edcfde6a81b645164df628e54ffd50c1bcf4dd9ca0a9e97ef3a92ea4d17ee804@group.calendar.google.com",
         "contents": {

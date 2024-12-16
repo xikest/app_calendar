@@ -3,7 +3,8 @@
     "filter":["bravia"]},
 
     "lg": {"skip":["notice", "stock", "deal"],
-    "filter":["lg"]}
-
+    "filter":["lg"]},
+    "panasonic": {"skip":["notice", "stock", "deal"],
+    "filter":["panasonic"]}
 
 }
