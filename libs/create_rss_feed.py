@@ -68,6 +68,10 @@ class RssFeed:
                             df = pd.DataFrame([[entry_title, published_date, link]], columns=['title', 'published', 'link'])
                             
                             df = df.dropna(axis=0, how='all')
+                            df_calendar = df_calendar.dropna(axis=0, how='all')
+                            
+                            df = df.dropna(axis=1, how='all')
+                            df_calendar = df_calendar.dropna(axis=1, how='all')
                             if not df.empty:
                                 df_calendar = pd.concat([df_calendar, df], ignore_index=True)
             
