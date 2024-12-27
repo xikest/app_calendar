@@ -1,10 +1,10 @@
 {
     "sony": {"skip":["notice", "stock", "deal"],
-    "filter":["bravia", "ces"]},
+    "filter":["bravia"]},
 
     "lg": {"skip":["notice", "stock", "deal"],
-    "filter":["oled","ces", "ifa"]},
+    "filter":["lg"]},
 
     "panasonic": {"skip":["notice", "stock", "deal"],
-    "filter":["ces", "テレビ"]}
+    "filter":["panasonic"]}
 }

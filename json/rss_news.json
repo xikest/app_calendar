@@ -76,13 +76,11 @@
         "calendar_id": "cbedbc7a7f5485a813453295dff73407cbad79543f69571ad69c1aa9a93204d7@group.calendar.google.com",
         "contents": {
             "rss": {
-                "panasocni_Business Strategy/Policy skipped":"https://news.panasonic.com/global/stories/16363",
-                "official skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UC2SIWgqcys7Gcb6JxsFTm1Q",
-                "Digital Trends skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UC8wXC0ZCfGt3HaVLy_fdTQw",
-                "RTINGS Home Theater skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCAi6GKtTPoYxUheIbVhnwqw",
-                "Abt Electronics skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UClFPdTOI8x3pR8qwcpAa_vA",
-                "Tech Steve skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCmHO0Rw7nBFK2233om_vyWA",
-                "Stop the FOMO skipped filtered": "https://www.youtube.com/feeds/videos.xml?channel_id=UCqHuvvETx7PKapuchT2BnSA"
+                "Digital Trends filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UC8wXC0ZCfGt3HaVLy_fdTQw",
+                "RTINGS Home Theater filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCAi6GKtTPoYxUheIbVhnwqw",
+                "Abt Electronics filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UClFPdTOI8x3pR8qwcpAa_vA",
+                "Tech Steve filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCmHO0Rw7nBFK2233om_vyWA",
+                "Stop the FOMO  filtered": "https://www.youtube.com/feeds/videos.xml?channel_id=UCqHuvvETx7PKapuchT2BnSA"
                 
             },
             "google": {
@@ -106,7 +104,7 @@
         "calendar_id": "5b28f05cbebdf8426beedc6e2fa267767529d17b91c561fccad83d7d6a5ab0f7@group.calendar.google.com",
         "contents": {
             "rss": {
-                "official skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCWfg-7LoIeXDLWb_8jpvjnA",
+                "panasonic_business strategy_policy skipped":"https://news.panasonic.com/global/stories/16363",
                 "Digital Trends skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UC8wXC0ZCfGt3HaVLy_fdTQw",
                 "RTINGS Home Theater skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCAi6GKtTPoYxUheIbVhnwqw",
                 "Abt Electronics skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UClFPdTOI8x3pR8qwcpAa_vA",
