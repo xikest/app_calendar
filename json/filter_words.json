@@ -3,7 +3,7 @@
     "filter":["bravia", "ces"]},
 
     "lg": {"skip":["notice", "stock", "deal"],
-    "filter":["lg","ces"]},
+    "filter":["oled","ces", "ifa"]},
 
     "panasonic": {"skip":["notice", "stock", "deal"],
     "filter":["panasonic", "ces", "テレビ"]}
