@@ -55,15 +55,15 @@ class RssFeed:
                             entry_title = entry.get("title", '')
                             link = entry.get("link", '')
                             parsed_date = parser.parse(entry.get("published", pd.NaT),tzinfos=tzinfos).strftime('%Y-%m-%d %H:%M:%S')
-                            published_date = pd.to_datetime(parsed_date)
-                            if src == 'rss':
-                                if RssFeed.skip(category, feed_name, entry_title, self.skip_dict):
-                                    continue
-                            elif src == 'google':
+                            published_date = pd.to_datetime(parsed_date)  
+                            if src == 'google':
                                 link = link.replace('https://www.google.com/url?rct=j&sa=t&url=', '').split('&ct=ga&cd')[0]
                                 entry_title = html.unescape(entry_title)
                                 entry_title = re.sub(r'<[^>]*>', '', entry_title)
-
+                                
+                            if RssFeed.skip(category, feed_name, entry_title, self.skip_dict):
+                                    continue
+                                
                             logging.info(f"{category}, {entry_title}, {published_date}, {link}")
                             df = pd.DataFrame([[entry_title, published_date, link]], columns=['title', 'published', 'link'])
                             
@@ -104,15 +104,15 @@ class RssFeed:
         if filter_dict is not None:
            
             # `skip` 조건 확인
-            if "filtered" in feed_name:
-                skip_words: list = filter_dict.get("skip")
-                if skip_words is not None and any(word.lower() in title for word in skip_words):
+            if "skipped" in feed_name:
+                skip_words: list = filter_dict.get("skip", [])
+                if any(word.lower() in title for word in skip_words):
                     return True  #
             
             # `filter` 조건 확인
             if "filtered" in feed_name:
-                filter_words: list = filter_dict.get("filter")
-                if filter_words is not None and not any(word.lower() in title for word in filter_words):
+                filter_words: list = filter_dict.get("filter", [])
+                if not any(word.lower() in title for word in filter_words):
                     return True  
         else:
             return False
