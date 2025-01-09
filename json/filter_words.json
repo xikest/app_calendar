@@ -6,5 +6,8 @@
     "filter":["lg"]},
 
     "panasonic": {"skip":["notice", "stock", "deal"],
-    "filter":["panasonic", "ces", "テレビ"]}
+    "filter":["panasonic", "ces", "テレビ"]},
+
+    "tv_common": {
+    "filter":["tv"]}
 }

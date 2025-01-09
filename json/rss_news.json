@@ -49,7 +49,6 @@
                 "Abt Electronics skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UClFPdTOI8x3pR8qwcpAa_vA",
                 "Tech Steve skipped filtered":"https://www.youtube.com/feeds/videos.xml?channel_id=UCmHO0Rw7nBFK2233om_vyWA",
                 "Stop the FOMO skipped filtered": "https://www.youtube.com/feeds/videos.xml?channel_id=UCqHuvvETx7PKapuchT2BnSA"
-
             },
             "google": {
                 "techradar.com": "https://www.google.co.kr/alerts/feeds/11305193269230284098/10884613516806591901",
@@ -126,6 +125,7 @@
             }
         }
     },
+
     "shipments": {
         "calendar_id": "edcfde6a81b645164df628e54ffd50c1bcf4dd9ca0a9e97ef3a92ea4d17ee804@group.calendar.google.com",
         "contents": {
@@ -133,7 +133,14 @@
                 "counterpointresearch":"https://www.google.co.kr/alerts/feeds/11305193269230284098/13244581557609396900"
             }
         }
+    },
+    "tv_common": {
+        "calendar_id": "7e3d3acb092c6125d272ae2d68c86a3b05ed6b63049c68288b09cebb0c2e3e37@group.calendar.google.com",
+        "contents": {
+            "rss": {
+                "HighFidelity TV filtered":"https://rsshub.app/youtube/playlist/PLg01yPsYkafjUFBdPLBh2KeUUoQRSfXao"
+            }
+        }
     }
-
 
 }
